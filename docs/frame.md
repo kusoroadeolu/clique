@@ -274,7 +274,7 @@ Clique.frame(BoxType.CLASSIC)
 
 ## See Also
 
-- [Boxes Documentation](boxes.md) - Text containers with borders
+- [Boxes Documentation](box.md) - Text containers with borders
 - [Tables Documentation](tables.md) - Structured data display
 - [Markup Reference](markup-reference.md) - Styling options for titles and string nodes
 - [Parser Documentation](parser.md) - How markup parsing works
