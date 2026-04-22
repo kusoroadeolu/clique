@@ -132,7 +132,7 @@ Clique.divider(40, config)
 
 - `width` must be greater than `0`. An `IllegalArgumentException` will be thrown otherwise
 - The title's **visible length** (excluding markup tags) must be strictly less than the divider width. An `IllegalArgumentException` will be thrown if it is equal to or exceeds the width
-- `DividerConfiguration` is immutable and thread-safe; `DividerConfigurationBuilder` is **not** synchronized externally if sharing a builder across threads
+- `DividerConfiguration` is immutable and thread-safe; `DividerConfigurationBuilder` **should be** synchronized externally if sharing a builder across threads
 
 ## See Also
 
