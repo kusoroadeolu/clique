@@ -246,6 +246,6 @@ _(no changes noted)_
 # Changelogs
 
 ## Clique [4.0.2] - [UNRELEASED]
-- `ProgressBar#tick(boolean render)` overloads to all tick methods to control if a tick should print to System.out
+- `ProgressBar#tick(boolean render)` overloads to all tick methods to control if a tick should print to `System.out`
 - `IterableProgressBar#printStream(PrintStream stream)` method for more control on iterable progress bar `PrintStream`
 

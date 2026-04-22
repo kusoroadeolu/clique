@@ -3,10 +3,11 @@ package io.github.kusoroadeolu.clique.configuration;
 import io.github.kusoroadeolu.clique.internal.utils.ParserUtils;
 import io.github.kusoroadeolu.clique.parser.MarkupParser;
 import io.github.kusoroadeolu.clique.spi.AnsiCode;
-import io.github.kusoroadeolu.clique.style.StyleCode;
 
 import java.util.Arrays;
 import java.util.Objects;
+
+import static io.github.kusoroadeolu.clique.internal.Constants.ZERO;
 
 /**
  * Immutable configuration for a {@link io.github.kusoroadeolu.clique.components.Divider}.
@@ -37,45 +38,79 @@ import java.util.Objects;
  *     .parser(MarkupParser.NONE)
  *     .build();
  *
- * Divider divider = new Divider(20, config);
  * }</pre>
  */
-public record DividerConfiguration(
-		AnsiCode[] dividerColor,
-		char dividerChar,
-		MarkupParser parser
-) {
+public class DividerConfiguration {
 
-	/**
-	 * A default {@code DividerConfiguration} with the default divider character
-	 * ({@code '─'}), no divider color, and {@link MarkupParser#DEFAULT} as the parser.
-	 */
-	public static final DividerConfiguration DEFAULT = new DividerConfiguration(new DividerConfigurationBuilder());
+    private final AnsiCode[] dividerColor;
+    private final char dividerChar;
+    private final MarkupParser parser;
 
-	/**
-	 * Creates a {@code DividerConfiguration} from a builder.
-	 *
-	 * @param builder the builder to use; must not be {@code null}
-	 * @throws NullPointerException if {@code builder} is {@code null}
-	 */
-	public DividerConfiguration(DividerConfigurationBuilder builder) {
-		this(builder.dividerColor, builder.dividerChar, builder.parser);
-	}
+    public static final DividerConfiguration DEFAULT = new DividerConfiguration();
 
-	/**
-	 * Returns a new builder for constructing a {@code DividerConfiguration}.
-	 *
-	 * @return a new {@link DividerConfigurationBuilder}
-	 */
-	public static DividerConfigurationBuilder builder() {
-		return new DividerConfigurationBuilder();
-	}
+    DividerConfiguration(DividerConfigurationBuilder builder) {
+        this(builder.dividerColor, builder.dividerChar, builder.parser);
+    }
 
-	public static class DividerConfigurationBuilder {
+    DividerConfiguration(){
+        this(new DividerConfigurationBuilder());
+    }
+
+
+    DividerConfiguration(AnsiCode[] dividerColor, char dividerChar, MarkupParser parser) {
+        this.dividerColor = dividerColor;
+        this.dividerChar = dividerChar;
+        this.parser = parser;
+    }
+
+    /**
+     * Returns a new builder for constructing a {@code DividerConfiguration}.
+     *
+     * @return a new {@link DividerConfigurationBuilder}
+     */
+    public static DividerConfigurationBuilder builder() {
+        return new DividerConfigurationBuilder();
+    }
+
+    public AnsiCode[] getDividerColor() {
+        return dividerColor.clone();
+    }
+
+    public char getDividerChar() {
+        return dividerChar;
+    }
+
+    public MarkupParser getParser() {
+        return parser;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+
+        DividerConfiguration that = (DividerConfiguration) o;
+        return dividerChar == that.dividerChar && Arrays.equals(dividerColor, that.dividerColor) && Objects.equals(parser, that.parser);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(Arrays.hashCode(dividerColor), dividerChar, parser);
+    }
+
+    @Override
+    public String toString() {
+        return "DividerConfiguration[" +
+                "dividerColor=" + Arrays.toString(dividerColor) +
+                ", dividerChar=" + dividerChar +
+                ", parser=" + parser +
+                ']';
+    }
+
+    public static class DividerConfigurationBuilder {
 
 		private char dividerChar = '─';
 
-		private AnsiCode[] dividerColor = new StyleCode[]{StyleCode.RESET};
+		private AnsiCode[] dividerColor = new AnsiCode[ZERO];
 
 		private MarkupParser parser = MarkupParser.DEFAULT;
 
@@ -113,9 +148,6 @@ public record DividerConfiguration(
 		 * <p>The markup string is resolved against the parser set via
 		 * {@link #parser(MarkupParser)} at the time this method is called.
 		 *
-		 * <p>Equivalent to {@code connectorColor(ParserUtils.getAnsiCodes(connectorColor, parser))}.
-		 * during rendering.
-		 *
 		 * @param color a markup string representing the desired Divider color;
 		 *              must not be {@code null}
 		 * @return this builder
@@ -134,7 +166,7 @@ public record DividerConfiguration(
 		 * @throws NullPointerException if {@code c} is {@code null}
 		 */
 		public DividerConfigurationBuilder dividerChar(char c) {
-			this.dividerChar = Objects.requireNonNull(c, "Divider char cannot be null");
+			this.dividerChar = c;
 			return this;
 		}
 
@@ -148,28 +180,4 @@ public record DividerConfiguration(
 		}
 	}
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof DividerConfiguration that)) return false;
-		return dividerChar == that.dividerChar &&
-			   Objects.equals(parser, that.parser) &&
-			   java.util.Arrays.equals(dividerColor, that.dividerColor);
-	}
-
-	@Override
-	public int hashCode() {
-		int result = Objects.hash(dividerChar, parser);
-		result = 31 * result + java.util.Arrays.hashCode(dividerColor);
-		return result;
-	}
-
-	@Override
-	public String toString() {
-		return "DividerConfiguration[" +
-			   "dividerColor=" + Arrays.toString(dividerColor) +
-			   ", dividerChar=" + dividerChar +
-			   ", parser=" + parser +
-			   ']';
-	}
 }

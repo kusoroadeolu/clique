@@ -80,7 +80,6 @@ public final class TreeConfiguration {
 
     /**
      * Returns a copy of the ANSI codes applied to tree connector characters
-     * ({@code ├─}, {@code └─}, {@code │}) during rendering.
      *
      * <p>Returns an empty array if no connector color has been set. A defensive copy
      * is returned on each call.
@@ -101,16 +100,14 @@ public final class TreeConfiguration {
 
     @Override
     public int hashCode() {
-        int result = Objects.hashCode(parser);
-        result = 31 * result + Objects.hashCode(connectorColor);
-        return result;
+        return Objects.hash(parser, Arrays.hashCode(connectorColor));
     }
 
     @Override
     public String toString() {
         return "TreeConfiguration[" +
                 "parser=" + parser +
-                ", guideStyle='" + Arrays.toString(connectorColor) + '\'' +
+                ", connectorColor='" + Arrays.toString(connectorColor) + '\'' +
                 ']';
     }
 

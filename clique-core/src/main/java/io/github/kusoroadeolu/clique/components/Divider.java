@@ -1,19 +1,21 @@
 package io.github.kusoroadeolu.clique.components;
 
 import io.github.kusoroadeolu.clique.configuration.DividerConfiguration;
+import io.github.kusoroadeolu.clique.internal.documentation.Stable;
 import io.github.kusoroadeolu.clique.internal.utils.StringUtils;
 import io.github.kusoroadeolu.clique.style.StyleBuilder;
 
 import java.util.Objects;
+
+import static io.github.kusoroadeolu.clique.internal.Constants.BLANK;
 
 /**
  * A horizontal divider line that can optionally display a title.
  * <p>
  * Divider renders a horizontal line of configurable width. When a title is
  * set via {@link #title(String)}, the title is centered within the divider line.
- * If the title exceeds the divider width, it is truncated with an ellipsis
- * character.
  */
+@Stable(since = "4.0.2")
 public class Divider implements Component {
 
 	private final DividerConfiguration configuration;
@@ -44,35 +46,26 @@ public class Divider implements Component {
 
 	@Override
 	public String get() {
-		String dividerChar = String.valueOf(configuration.dividerChar());
+		String dividerChar = String.valueOf(configuration.getDividerChar());
 
 		if (title == null || title.isEmpty()) {
 			return new StyleBuilder()
-					.appendAndReset(dividerChar.repeat(width), configuration.dividerColor())
+					.appendAndReset(dividerChar.repeat(width), configuration.getDividerColor())
 					.toString();
 		}
 
-		if (title.length() >= width) {
-			String truncated = (width <= 1)
-					? title.substring(0, width)
-					: title.substring(0, width - 1) + "…";
-
-			return new StyleBuilder()
-					.appendAndReset(truncated, configuration.dividerColor())
-					.toString();
-		}
-
-		int contentLength = configuration.parser().getOriginalString(title).length() + 2; // add 2 from padding
-		String content = " " + StringUtils.parse(title, configuration.parser()) + " ";
+		int contentLength = configuration.getParser().getOriginalString(title).length() + 2; // add 2 from padding
+		String content = BLANK + StringUtils.parse(title, configuration.getParser()) + BLANK;
 
 
 		int remaining = width - contentLength;
 		int left = remaining / 2;
 		int right = remaining - left;
 
-		return new StyleBuilder().appendAndReset(dividerChar.repeat(left), configuration.dividerColor())
-				.append(content)
-				.appendAndReset(dividerChar.repeat(right), configuration.dividerColor())
+		return new StyleBuilder()
+                .appendAndReset(dividerChar.repeat(left), configuration.getDividerColor())
+				.appendAndReset(content)
+				.appendAndReset(dividerChar.repeat(right), configuration.getDividerColor())
 				.toString();
 	}
 
@@ -81,17 +74,24 @@ public class Divider implements Component {
 	 * <p>
 	 *
 	 * @param title the title to display; may be {@code null} to render a plain line
+     *
+     * @throws IllegalArgumentException if the visible title length exceeds or is equal to the divider width
 	 * @return this divider instance
 	 */
 	public Divider title(String title) {
-		this.title = title;
-		return this;
+        String visible = configuration.getParser().getOriginalString(title);
+        if (visible.length() >= width) {
+            throw new IllegalArgumentException(
+                    "Title's visible length must be less than divider width."
+            );
+        }
+        this.title = title;
+        return this;
 	}
 
 	@Override
 	public boolean equals(Object object) {
 		if (object == null || getClass() != object.getClass()) return false;
-		if (!super.equals(object)) return false;
 
 		Divider that = (Divider) object;
 		return width == that.width && Objects.equals(configuration, that.configuration) && Objects.equals(title, that.title);

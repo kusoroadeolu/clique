@@ -2,6 +2,7 @@ package io.github.kusoroadeolu.clique.configuration;
 
 import io.github.kusoroadeolu.clique.internal.CompositeColor;
 import io.github.kusoroadeolu.clique.internal.documentation.Experimental;
+import io.github.kusoroadeolu.clique.internal.documentation.Stable;
 import io.github.kusoroadeolu.clique.spi.AnsiCode;
 
 import java.util.Collection;
@@ -39,7 +40,7 @@ import java.util.Objects;
  *
  * @since 4.0.0
  */
-@Experimental(since = "4.0.0")
+@Stable(since = "4.0.2")
 public final class StyleContext {
 
     private final Map<String, AnsiCode> localStyles;
