@@ -4,6 +4,7 @@ import io.github.kusoroadeolu.clique.components.*;
 import io.github.kusoroadeolu.clique.configuration.*;
 import io.github.kusoroadeolu.clique.internal.TableFactory;
 import io.github.kusoroadeolu.clique.spi.AnsiCode;
+import io.github.kusoroadeolu.clique.style.ColorCode;
 
 import java.util.Collection;
 
@@ -83,6 +84,26 @@ final class CliqueComponents {
         return new Box(type, BoxConfiguration.builder().borderColor(borderColor).build());
     }
 
+    // DIVIDER
+    public static Divider divider(int width) {
+        return new Divider(width, DividerConfiguration.builder().build());
+    }
+
+    public static Divider divider(int width, String color) {
+        return new Divider(width, DividerConfiguration.builder()
+                .dividerColor(color)
+                .build());
+    }
+
+    public static Divider divider(int width, ColorCode color) {
+        return new Divider(width, DividerConfiguration.builder()
+                .dividerColor(color)
+                .build());
+    }
+
+    public static Divider divider(int width, DividerConfiguration config) {
+        return new Divider(width, config);
+    }
 
     // INDENTER
     public static ItemList list() {

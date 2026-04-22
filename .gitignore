@@ -36,4 +36,4 @@ docs/showcase.md
 
 ## Intellij
 .idea
-*.iml
+**.iml

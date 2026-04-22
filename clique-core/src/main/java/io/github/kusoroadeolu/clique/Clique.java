@@ -8,6 +8,7 @@ import io.github.kusoroadeolu.clique.parser.MarkupParser;
 import io.github.kusoroadeolu.clique.spi.AnsiCode;
 import io.github.kusoroadeolu.clique.spi.CliqueTheme;
 import io.github.kusoroadeolu.clique.spi.RGBAnsiCode;
+import io.github.kusoroadeolu.clique.style.ColorCode;
 import io.github.kusoroadeolu.clique.style.Ink;
 import io.github.kusoroadeolu.clique.style.StyleBuilder;
 
@@ -251,6 +252,53 @@ public final class Clique {
     public static Box box(String borderColor) { return CliqueComponents.box(borderColor); }
 
     // -------------------------------------------------------------------------
+    // DIVIDER
+    // -------------------------------------------------------------------------
+
+    /**
+     * Creates a {@link Divider} with a given width.
+     *
+     * @param width the width of the divider.
+     * @return a new {@link Divider} instance
+     */
+    public static Divider divider(int width ) {
+        return CliqueComponents.divider(width);
+    }
+
+    /**
+     * Creates a {@link Divider} with a given width and color.
+     *
+     * @param width the width of the divider
+     * @param color the color of the divider
+     * @return a new {@link Divider} instance
+     */
+    public static Divider divider(int width, String color) {
+        return CliqueComponents.divider(width, color);
+    }
+
+    /**
+     * Creates a {@link Divider} with a given width and color.
+     *
+     * @param width the width of the divider
+     * @param color the color of the divider
+     * @return a new {@link Divider} instance
+     */
+    public static Divider divider(int width, ColorCode color) {
+        return CliqueComponents.divider(width, color);
+    }
+
+    /**
+     * Creates a {@link Divider} with a given width and configuration.
+     *
+     * @param width the width of the divider
+     * @param config the divider configuration to use
+     * @return a new {@link Divider} instance
+     */
+    public static Divider divider(int width, DividerConfiguration config) {
+        return CliqueComponents.divider(width, config);
+    }
+
+    // -------------------------------------------------------------------------
     // ITEM LIST
     // -------------------------------------------------------------------------
 
@@ -269,7 +317,6 @@ public final class Clique {
      * @return a new {@code ItemList} instance
      */
     public static ItemList list(ItemListConfiguration itemListConfiguration) { return CliqueComponents.list(itemListConfiguration); }
-
     // -------------------------------------------------------------------------
     // PROGRESS BAR
     // -------------------------------------------------------------------------

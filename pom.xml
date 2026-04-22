@@ -26,6 +26,11 @@
             <name>Kusoro Adeolu</name>
             <email>kusorodeolu@gmail.com</email>
         </developer>
+        <developer>
+            <id>jonas-grgt</id>
+            <name>Jonas Geiregat</name>
+            <email>jonas.grgt@gmail.com</email>
+        </developer>
     </developers>
     <modules>
         <module>clique-core</module>
