@@ -95,7 +95,7 @@ final class CliqueComponents {
                 .build());
     }
 
-    public static Divider divider(int width, ColorCode color) {
+    public static Divider divider(int width, AnsiCode... color) {
         return new Divider(width, DividerConfiguration.builder()
                 .dividerColor(color)
                 .build());

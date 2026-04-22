@@ -283,7 +283,7 @@ public final class Clique {
      * @param color the color of the divider
      * @return a new {@link Divider} instance
      */
-    public static Divider divider(int width, ColorCode color) {
+    public static Divider divider(int width, AnsiCode... color) {
         return CliqueComponents.divider(width, color);
     }
 
