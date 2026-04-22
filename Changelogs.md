@@ -248,4 +248,5 @@ _(no changes noted)_
 ## Clique [4.0.2] - [UNRELEASED]
 - `ProgressBar#tick(boolean render)` overloads to all tick methods to control if a tick should print to `System.out`
 - `IterableProgressBar#printStream(PrintStream stream)` method for more control on iterable progress bar `PrintStream`
-
+- Added `Divider` component — a horizontal divider line with optional centered title and markup support
+- `DividerConfiguration` for customizing divider character, color, and parser

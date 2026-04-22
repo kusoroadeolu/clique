@@ -127,7 +127,8 @@ public class ItemList implements Component {
      * Internal test helper to retrieve the first child sublist.
      */
     ItemList child(){
-        return items.stream().map(ListItem::sublist)
+        return items.stream()
+                .map(ListItem::sublist)
                 .toList()
                 .getFirst();
     }

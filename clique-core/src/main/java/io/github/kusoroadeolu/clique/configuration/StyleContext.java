@@ -1,7 +1,6 @@
 package io.github.kusoroadeolu.clique.configuration;
 
 import io.github.kusoroadeolu.clique.internal.CompositeColor;
-import io.github.kusoroadeolu.clique.internal.documentation.Experimental;
 import io.github.kusoroadeolu.clique.internal.documentation.Stable;
 import io.github.kusoroadeolu.clique.spi.AnsiCode;
 
