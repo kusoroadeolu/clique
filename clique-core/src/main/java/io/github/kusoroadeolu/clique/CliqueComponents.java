@@ -4,7 +4,6 @@ import io.github.kusoroadeolu.clique.components.*;
 import io.github.kusoroadeolu.clique.configuration.*;
 import io.github.kusoroadeolu.clique.internal.TableFactory;
 import io.github.kusoroadeolu.clique.spi.AnsiCode;
-import io.github.kusoroadeolu.clique.style.ColorCode;
 
 import java.util.Collection;
 

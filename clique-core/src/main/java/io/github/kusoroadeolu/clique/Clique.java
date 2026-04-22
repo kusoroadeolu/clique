@@ -8,7 +8,6 @@ import io.github.kusoroadeolu.clique.parser.MarkupParser;
 import io.github.kusoroadeolu.clique.spi.AnsiCode;
 import io.github.kusoroadeolu.clique.spi.CliqueTheme;
 import io.github.kusoroadeolu.clique.spi.RGBAnsiCode;
-import io.github.kusoroadeolu.clique.style.ColorCode;
 import io.github.kusoroadeolu.clique.style.Ink;
 import io.github.kusoroadeolu.clique.style.StyleBuilder;
 
