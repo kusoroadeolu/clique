@@ -95,7 +95,7 @@ public class AsciiTable extends AbstractTable {
         if (!super.equals(object)) return false;
 
         AsciiTable that = (AsciiTable) object;
-        return Objects.equals(corner, that.corner) && Objects.equals(hLine, that.hLine) && Objects.equals(vLine, that.vLine);
+        return corner.equals(that.corner) && Objects.equals(hLine, that.hLine) && Objects.equals(vLine, that.vLine);
     }
 
     @Override

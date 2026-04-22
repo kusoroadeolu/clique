@@ -11,9 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class DividerTest {
 
@@ -76,11 +74,9 @@ class DividerTest {
 	}
 
 	@Test
-	void titleLongerThanWidth() {
-		var divider = Clique.divider(10).title("Clique rocks");
-		var output = MarkupParser.DEFAULT.getOriginalString(divider.get());
-		assertEquals(10, output.length());
-		assertEquals("Clique ro…", output);
+	void titleLongerThanWidthAssertThrows() {
+		var divider = Clique.divider(10);
+        assertThrows(IllegalArgumentException.class, () -> divider.title("Clique rocks"));
 	}
 
 	@Test
@@ -107,8 +103,8 @@ class DividerTest {
 					.dividerChar('*')
 					.build();
 			var divider = Clique.divider(100, config);
-			var output = divider.get();
-			assertEquals(108, output.length());
+			var output = MarkupParser.DEFAULT.getOriginalString(divider.get());
+			assertEquals(100, output.length());
 			assertTrue(output.contains("**"));
 		}
 
@@ -119,8 +115,7 @@ class DividerTest {
 					.build();
 			var divider = Clique.divider(100, config);
 			var output = divider.get();
-			assertTrue(output.startsWith(ColorCode.RED.ansiSequence()));
-			assertTrue(output.endsWith(StyleCode.RESET.ansiSequence()));
+			assertTrue(output.startsWith(ColorCode.RED.ansiSequence()) && output.endsWith(StyleCode.RESET.ansiSequence()));
 		}
 
 		@Test
@@ -130,9 +125,7 @@ class DividerTest {
 					.build();
 			var divider = Clique.divider(100, config);
 			var output = divider.get();
-			assertTrue(output.startsWith(ColorCode.RED.ansiSequence()));
-			assertTrue(output.endsWith(StyleCode.RESET.ansiSequence()));
-		}
+			assertTrue(output.startsWith(ColorCode.RED.ansiSequence()) && output.endsWith(StyleCode.RESET.ansiSequence()));}
 
 		@Test
 		void dividerColorWithColoredTitle() {

@@ -127,7 +127,8 @@ public class ItemList implements Component {
      * Internal test helper to retrieve the first child sublist.
      */
     ItemList child(){
-        return items.stream().map(ListItem::sublist)
+        return items.stream()
+                .map(ListItem::sublist)
                 .toList()
                 .getFirst();
     }
@@ -139,4 +140,24 @@ public class ItemList implements Component {
         return configuration;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ItemList itemList = (ItemList) o;
+        return Objects.equals(items, itemList.items) && Objects.equals(configuration, itemList.configuration);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(items, configuration);
+    }
+
+    @Override
+    public String toString() {
+        return "ItemList[" +
+                "items=" + items +
+                ", configuration=" + configuration +
+                ']';
+    }
 }
