@@ -150,8 +150,7 @@ class ProgressBarTest {
         ProgressBar bar = new ProgressBar(100, config);
         bar.tick(75, false);
 
-        assertTrue(bar.get().contains("FIRST"));
-        assertFalse(bar.get().contains("SECOND"));
+        assertTrue(bar.get().contains("FIRST") && !bar.get().contains("SECOND"));
     }
 
     @Test
@@ -193,5 +192,41 @@ class ProgressBarTest {
 
         String output = bar.get();
         assertFalse(output.contains("[red]")); //Should contain the actual ansi code instead
+    }
+
+    @Test
+    void testTotalUnitsComesBeforeTotal() {
+        ProgressBarConfiguration configuration = ProgressBarConfiguration.builder()
+                .format("[green]:bar :percent% :total :units/:total-units[/]")
+                .tickPerUnit(2)
+                .build();
+        ProgressBar bar = new ProgressBar(100, configuration);
+        var str = bar.get();
+        assertTrue(str.contains("50") && str.contains("100"));
+    }
+
+    @Test
+    void testUnitsIncrementsByTicksPerUnit() {
+        ProgressBarConfiguration configuration = ProgressBarConfiguration.builder()
+                .format("[green]:bar :percent% :total :units/:total-units[/]")
+                .tickPerUnit(2)
+                .build();
+        ProgressBar bar = new ProgressBar(100, configuration);
+        bar.tick(4, false);
+        assertTrue(bar.get().contains("2"));
+    }
+
+    @Test
+    void assertThrowsOnZeroTickPerUnit() {
+        var builder = ProgressBarConfiguration.builder()
+                .format("[green]:bar :percent% :total :units/:total-units[/]");
+        assertThrows(IllegalArgumentException.class, () -> builder.tickPerUnit(0));
+    }
+
+    @Test
+    void assertThrowsOnNegativeTickPerUnit() {
+        var builder = ProgressBarConfiguration.builder()
+                .format("[green]:bar :percent% :total :units/:total-units[/]");
+        assertThrows(IllegalArgumentException.class, () -> builder.tickPerUnit(-1));
     }
 }

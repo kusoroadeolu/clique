@@ -35,7 +35,7 @@ import static io.github.kusoroadeolu.clique.internal.Constants.ZERO;
  * DividerConfiguration config = DividerConfiguration.builder()
  *     .dividerChar('=')
  *     .dividerColor("red")
- *     .parser(MarkupParser.NONE)
+ *     .parser(MarkupParser.DEFAULT)
  *     .build();
  *
  * }</pre>

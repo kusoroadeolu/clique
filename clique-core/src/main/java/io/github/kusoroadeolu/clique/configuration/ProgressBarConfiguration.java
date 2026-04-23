@@ -74,6 +74,7 @@ public final class ProgressBarConfiguration {
     private final MarkupParser parser;
     private final List<ProgressBarPredicate> styles;
     private final EasingConfiguration easingConfiguration;
+    private final int tickPerUnit;
 
 
     private ProgressBarConfiguration(ProgressBarConfigurationBuilder builder) {
@@ -84,6 +85,7 @@ public final class ProgressBarConfiguration {
         this.parser = builder.parser;
         this.styles = Collections.unmodifiableList(builder.styles);
         this.easingConfiguration = builder.easing;
+        this.tickPerUnit = builder.tickPerUnit;
     }
 
     /**
@@ -195,6 +197,10 @@ public final class ProgressBarConfiguration {
         return easingConfiguration;
     }
 
+    public int tickPerUnit() {
+        return tickPerUnit;
+    }
+
     @Override
     public boolean equals(Object object) {
         if (object == null || getClass() != object.getClass()) return false;
@@ -230,9 +236,10 @@ public final class ProgressBarConfiguration {
         private int length = 40;
         private char complete = '█';
         private char incomplete = '░';
+        private int tickPerUnit = 1;
         private String format = ":bar :percent% [:elapsed/:remaining]";
         private MarkupParser parser = MarkupParser.DEFAULT;
-        private List<ProgressBarPredicate> styles = new ArrayList<>();
+        private final List<ProgressBarPredicate> styles = new ArrayList<>();
         private EasingConfiguration easing = EasingConfiguration.DEFAULT;
         private static final String FORMAT_ERR_MESSAGE = "Format cannot be null";
 
@@ -244,6 +251,12 @@ public final class ProgressBarConfiguration {
 
         public ProgressBarConfigurationBuilder complete(char complete) {
             this.complete = complete;
+            return this;
+        }
+
+        public ProgressBarConfigurationBuilder tickPerUnit(int tickPerUnit) {
+            if (tickPerUnit <= 0) throw new IllegalArgumentException("Tick per unit cannot be less than 0");
+            this.tickPerUnit = tickPerUnit;
             return this;
         }
 
@@ -278,7 +291,7 @@ public final class ProgressBarConfiguration {
 
         public ProgressBarConfigurationBuilder styles(Collection<ProgressBarPredicate> formats) {
             requireNonNull(formats, "Format styles cannot be null");
-            this.styles = new ArrayList<>(formats);
+            this.styles.addAll(formats);
             return this;
         }
 

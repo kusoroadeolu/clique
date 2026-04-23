@@ -35,6 +35,7 @@ import static io.github.kusoroadeolu.clique.internal.utils.StringUtils.stripAnsi
 @Stable(since = "3.2.0")
 @SuppressWarnings("java:S106")
 public record MarkupParser(ParserConfiguration parserConfiguration) {
+
     /**
      * A parser using {@link ParserConfiguration#DEFAULT}.
      */
