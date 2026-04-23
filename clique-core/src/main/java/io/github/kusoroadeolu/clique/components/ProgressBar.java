@@ -317,7 +317,7 @@ public class ProgressBar implements Component {
 
         format = format.replace(":progress", progress);
 
-        String totalUnits = String.valueOf( this.total / configuration.tickPerUnit());
+        String totalUnits = String.valueOf( this.total / configuration.getTicksPerUnit());
         format = format.replace(":total-units", totalUnits);
 
         var t = String.valueOf(this.total);
@@ -326,7 +326,7 @@ public class ProgressBar implements Component {
         var percent = alignRight(String.valueOf(this.percent()), 3);
         format = format.replace(":percent", percent);
 
-        String tickUnit = String.valueOf(currentTick / configuration.tickPerUnit());
+        String tickUnit = String.valueOf(currentTick / configuration.getTicksPerUnit());
         format = format.replace(":units", tickUnit);
 
 

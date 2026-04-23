@@ -197,33 +197,34 @@ public final class ProgressBarConfiguration {
         return easingConfiguration;
     }
 
-    public int tickPerUnit() {
+    public int getTicksPerUnit() {
         return tickPerUnit;
     }
 
     @Override
-    public boolean equals(Object object) {
-        if (object == null || getClass() != object.getClass()) return false;
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
 
-        ProgressBarConfiguration that = (ProgressBarConfiguration) object;
-        return length == that.length && complete == that.complete && incomplete == that.incomplete && Objects.equals(format, that.format) && Objects.equals(parser, that.parser) && styles.equals(that.styles) && Objects.equals(easingConfiguration, that.easingConfiguration);
+        ProgressBarConfiguration that = (ProgressBarConfiguration) o;
+        return length == that.length && complete == that.complete && incomplete == that.incomplete && tickPerUnit == that.tickPerUnit && format.equals(that.format) && parser.equals(that.parser) && styles.equals(that.styles) && easingConfiguration.equals(that.easingConfiguration);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(length, complete, incomplete, format, parser, styles, easingConfiguration);
+        return Objects.hash(length, complete, incomplete, format, parser, styles, easingConfiguration, tickPerUnit);
     }
 
     @Override
     public String toString() {
         return "ProgressBarConfiguration[" +
-                "height=" + length +
+                "length=" + length +
                 ", complete=" + complete +
                 ", incomplete=" + incomplete +
                 ", format='" + format + '\'' +
                 ", parser=" + parser +
                 ", styles=" + styles +
                 ", easingConfiguration=" + easingConfiguration +
+                ", ticksPerUnit=" + tickPerUnit +
                 ']';
     }
 
@@ -254,7 +255,7 @@ public final class ProgressBarConfiguration {
             return this;
         }
 
-        public ProgressBarConfigurationBuilder tickPerUnit(int tickPerUnit) {
+        public ProgressBarConfigurationBuilder ticksPerUnit(int tickPerUnit) {
             if (tickPerUnit <= 0) throw new IllegalArgumentException("Tick per unit cannot be less than 0");
             this.tickPerUnit = tickPerUnit;
             return this;
