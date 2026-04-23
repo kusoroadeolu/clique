@@ -181,7 +181,7 @@ public class ProgressBar implements Component {
      * @throws IllegalArgumentException if {@code to} is less than {@code 0}
      */
     public ProgressBar tickTo(int to){
-        return tick(to, true);
+        return tickTo(to, true);
     }
 
 
