@@ -229,4 +229,17 @@ class ProgressBarTest {
                 .format("[green]:bar :percent% :total :units/:total-units[/]");
         assertThrows(IllegalArgumentException.class, () -> builder.tickPerUnit(-1));
     }
+
+    @Test
+    void testTickToThrowsOnNegativeTick() {
+        ProgressBar bar = new ProgressBar(100);
+        assertThrows(IllegalArgumentException.class, () -> bar.tickTo(-1, false));
+    }
+
+    @Test
+    void testTickToClampsOnOverflowTick(){
+        ProgressBar bar = new ProgressBar(100);
+        bar.tickTo(105, false);
+        assertEquals(100, bar.currentTick);
+    }
 }
