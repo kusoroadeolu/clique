@@ -151,6 +151,40 @@ public class ProgressBar implements Component {
         }
     }
 
+    /**
+     * Advances or rewinds the progress bar to the given tick position.
+     *
+     * <p>The current tick is clamped to {@code [0, total]}. If this call causes
+     * {@code currentTick >= total}, {@link #isDone()} will return {@code true} and
+     * a newline is emitted on the next render.
+     *
+     * @param to the tick position to move to; must be {@code >= 0}
+     * @param render if the progress bar should be re-rendered to {@link System#out}
+     * @return this instance
+     * @throws IllegalArgumentException if {@code to} is less than {@code 0}
+     */
+    public ProgressBar tickTo(int to, boolean render){
+        if (to < 0) throw new IllegalArgumentException("Tick to cannot be less than zero");
+        currentTick = Math.clamp(to, ZERO, total);
+        if (currentTick >= total && !isDone) isDone = true;
+        if (render) this.render();
+        return this;
+    }
+
+    /**
+     * Advances or rewinds the progress bar to the given tick position and re-renders it to {@link System#out}.
+     *
+     * <p>Equivalent to {@link #tickTo(int, boolean) tickTo(to, true)}.
+     *
+     * @param to the tick position to move to; must be {@code >= 0}
+     * @return this instance
+     * @throws IllegalArgumentException if {@code to} is less than {@code 0}
+     */
+    public ProgressBar tickTo(int to){
+        return tick(to, true);
+    }
+
+
 
     private void easeTick(int amount, EasingConfiguration easingConfig) {
         int startValue = this.currentTick;
@@ -312,6 +346,12 @@ public class ProgressBar implements Component {
         printStream.print("\r" + get());
         if (isDone) printStream.println();
         printStream.flush();
+    }
+
+
+    //For tests
+    int currentTick(){
+        return currentTick;
     }
 
 

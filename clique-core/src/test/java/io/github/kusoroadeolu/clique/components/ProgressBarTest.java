@@ -194,4 +194,25 @@ class ProgressBarTest {
         String output = bar.get();
         assertFalse(output.contains("[red]")); //Should contain the actual ansi code instead
     }
+
+    @Test
+    void testTickToThrowsOnNegativeTick() {
+        ProgressBar bar = new ProgressBar(100);
+        assertThrows(IllegalArgumentException.class, () -> bar.tickTo(-1, false));
+    }
+
+    @Test
+    void testTickToThrowsOnZeroTick() {
+        ProgressBar bar = new ProgressBar(100);
+        assertThrows(IllegalArgumentException.class, () -> bar.tickTo(0, false));
+    }
+
+
+    @Test
+    void testTickToClampsOnOverflowTick(){
+        ProgressBar bar = new ProgressBar(100);
+        bar.tickTo(105, false);
+        assertEquals(100, bar.currentTick);
+    }
+
 }
