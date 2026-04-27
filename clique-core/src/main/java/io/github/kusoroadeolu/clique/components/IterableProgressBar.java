@@ -79,6 +79,12 @@ public class IterableProgressBar<T> implements Iterable<T> {
         return new ProgressBarIterator<>(this);
     }
 
+    /**
+     * Prints the progress bar component to the given {@link PrintStream}, followed by a newline.
+     *
+     * @param stream the stream to print to; must not be {@code null}
+     * @throws NullPointerException if {@code stream} is {@code null}
+     */
     public IterableProgressBar<T> printStream(PrintStream stream){
         this.stream = Objects.requireNonNull(stream, "Print stream cannot be null");
         return this;
