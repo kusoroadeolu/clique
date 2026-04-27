@@ -329,7 +329,6 @@ public class ProgressBar implements Component {
         String tickUnit = String.valueOf(currentTick / configuration.getTicksPerUnit());
         format = format.replace(":units", tickUnit);
 
-
         var elapsed = interval(this.elapsedTime());
         format = format.replace(":elapsed", elapsed);
 

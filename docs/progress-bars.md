@@ -152,6 +152,16 @@ Characters used for filled and unfilled portions:
 .incomplete('░')
 ```
 
+#### Ticks Per Unit
+Map multiple ticks to a single logical unit for `:units` and `:total-units` tokens.
+Useful when each item you're processing has multiple internal steps:
+```java
+.ticksPerUnit(5)
+```
+
+For example, with `ticksPerUnit(5)` and a total of `50` ticks, `:total-units` renders
+as `10` and `:units` increments automatically as ticks accumulate.
+
 #### Format String
 Template for the progress bar output with placeholders:
 ```java
@@ -165,6 +175,8 @@ Template for the progress bar output with placeholders:
 - `:total` - Total tick count
 - `:elapsed` - Elapsed time (MM:SS)
 - `:remaining` - Estimated remaining time (MM:SS)
+- `:units` - Current number of completed units (derived from tick count ÷ ticksPerUnit)
+- `:total-units` - Total number of units (derived from total ÷ ticksPerUnit)
 
 #### Custom Parser
 Use a custom parser for markup processing:
@@ -190,57 +202,10 @@ ProgressBar bar = Clique.progressBar(100, config);
 Use `styleWhen()` for custom conditions:
 ```java
 ProgressBarConfiguration config = ProgressBarConfiguration.builder()
-        .styleWhen(p -> p < 50, "[red]:bar[/] :percent%")
-        .styleWhen(p -> p >= 50 && p < 90, "[yellow]:bar[/] :percent%")
+        .styleWhen(p -> p <= 50, "[red]:bar[/] :percent%")
+        .styleWhen(p -> p > 50 && p < 90, "[yellow]:bar[/] :percent%")
         .styleWhen(p -> p >= 90, "[green]:bar[/] :percent%")
         .build();
-```
-
-## Progress Bar Methods
-
-### tick()
-Increment progress by 1 and render:
-```java
-bar.tick();
-```
-
-### tick(amount)
-Increment progress by a specific amount and render:
-```java
-bar.tick(10);
-```
-
-### tickAnimated(amount)
-Increment with smooth easing animation (requires easing configuration):
-```java
-bar.tickAnimated(25);
-```
-
-### complete()
-Jump to 100%:
-```java
-bar.complete();
-```
-
-### isDone()
-Check if progress is complete:
-```java
-if (bar.isDone()) {
-        System.out.println("Finished!");
-}
-```
-
-### render()
-Display the progress bar:
-```java
-bar.render();  // Prints to System.out
-```
-
-### get()
-Get the formatted progress bar string without rendering:
-```java
-String barText = bar.get();
-System.out.println(barText);
 ```
 
 ## Quick Examples
@@ -285,6 +250,24 @@ for (var file : Clique.progressBar(files, config)) {
     process(file);
 }
 ```
+### Processing Files with Steps
+```java
+// 10 files, 5 steps each = 50 ticks, displayed as units
+ProgressBarConfiguration config = ProgressBarConfiguration.builder()
+        .ticksPerUnit(5)
+        .format(":bar :percent% | :units/:total-units files [:elapsed/:remaining]")
+        .build();
+
+ProgressBar bar = Clique.progressBar(50, config);
+
+for (File file : files) {
+    for (int step = 0; step < 5; step++) {
+        process(file, step);
+        bar.tick();
+    }
+}
+```
+
 
 ## See Also
 
