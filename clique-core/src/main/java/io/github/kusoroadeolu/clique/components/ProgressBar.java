@@ -41,7 +41,7 @@ import static io.github.kusoroadeolu.clique.internal.utils.StringUtils.parse;
 public class ProgressBar implements Component {
     final int total;
     final long creationTime;
-    final ProgressBarConfiguration progressBarConfiguration;
+    final ProgressBarConfiguration configuration;
     int currentTick;
     boolean isDone;
 
@@ -57,7 +57,7 @@ public class ProgressBar implements Component {
         this.total = total;
         this.isDone = isDone;
         this.creationTime = creationTime;
-        this.progressBarConfiguration = configuration;
+        this.configuration = configuration;
     }
 
     public ProgressBar(int total, ProgressBarConfiguration configuration) {
@@ -142,7 +142,7 @@ public class ProgressBar implements Component {
      * @return this instance
      */
     public ProgressBar tickAnimated(int amount) {
-        var config = this.progressBarConfiguration;
+        var config = this.configuration;
         if (config != null && config.getEasing().shouldEase(amount)) {
             this.easeTick(amount, config.getEasing());
             return this;
@@ -150,6 +150,40 @@ public class ProgressBar implements Component {
             return this.tick(amount);
         }
     }
+
+    /**
+     * Advances or rewinds the progress bar to the given tick position.
+     *
+     * <p>The current tick is clamped to {@code [0, total]}. If this call causes
+     * {@code currentTick >= total}, {@link #isDone()} will return {@code true} and
+     * a newline is emitted on the next render.
+     *
+     * @param to the tick position to move to; must be {@code >= 0}
+     * @param render if the progress bar should be re-rendered to {@link System#out}
+     * @return this instance
+     * @throws IllegalArgumentException if {@code to} is less than {@code 0}
+     */
+    public ProgressBar tickTo(int to, boolean render){
+        if (to < 0) throw new IllegalArgumentException("Tick to cannot be less than zero");
+        currentTick = Math.clamp(to, ZERO, total);
+        if (currentTick >= total && !isDone) isDone = true;
+        if (render) this.render();
+        return this;
+    }
+
+    /**
+     * Advances or rewinds the progress bar to the given tick position and re-renders it to {@link System#out}.
+     *
+     * <p>Equivalent to {@link #tickTo(int, boolean) tickTo(to, true)}.
+     *
+     * @param to the tick position to move to; must be {@code >= 0}
+     * @return this instance
+     * @throws IllegalArgumentException if {@code to} is less than {@code 0}
+     */
+    public ProgressBar tickTo(int to){
+        return tickTo(to, true);
+    }
+
 
 
     private void easeTick(int amount, EasingConfiguration easingConfig) {
@@ -238,9 +272,9 @@ public class ProgressBar implements Component {
     }
 
     private String barText() {
-        var length = progressBarConfiguration.getLength();
-        var complete = progressBarConfiguration.getComplete();
-        var incomplete = progressBarConfiguration.getIncomplete();
+        var length = configuration.getLength();
+        var complete = configuration.getComplete();
+        var incomplete = configuration.getIncomplete();
 
         var completedRatio = total > ZERO ? (this.currentTick / (double) this.total) : ZERO;
         var completedLength = (int) (completedRatio * length);
@@ -272,7 +306,7 @@ public class ProgressBar implements Component {
      */
     public String get() {
         var currentPercent = this.percent();
-        var format = progressBarConfiguration.getFormatForPercent(currentPercent);
+        var format = configuration.getFormatForPercent(currentPercent);
         var bar = barText();
         format = format.replace(":bar", bar);
 
@@ -283,19 +317,25 @@ public class ProgressBar implements Component {
 
         format = format.replace(":progress", progress);
 
+        String totalUnits = String.valueOf( this.total / configuration.getTicksPerUnit());
+        format = format.replace(":total-units", totalUnits);
+
         var t = String.valueOf(this.total);
         format = format.replace(":total", t);
 
         var percent = alignRight(String.valueOf(this.percent()), 3);
         format = format.replace(":percent", percent);
 
+        String tickUnit = String.valueOf(currentTick / configuration.getTicksPerUnit());
+        format = format.replace(":units", tickUnit);
+
         var elapsed = interval(this.elapsedTime());
         format = format.replace(":elapsed", elapsed);
 
-        var remaining = interval(remainingTime());
+        var remaining = interval(this.remainingTime());
         format = format.replace(":remaining", remaining);
 
-        return parse(format, this.progressBarConfiguration.getParser());
+        return parse(format, this.configuration.getParser());
     }
 
     /**
@@ -315,10 +355,16 @@ public class ProgressBar implements Component {
     }
 
 
+    //For tests
+    int currentTick(){
+        return currentTick;
+    }
+
+
     public boolean equals(Object object) {
         if (object == null || getClass() != object.getClass()) return false;
         var that = (ProgressBar) object;
-        return currentTick == that.currentTick && total == that.total && isDone == that.isDone && creationTime == that.creationTime && Objects.equals(progressBarConfiguration, that.progressBarConfiguration);
+        return currentTick == that.currentTick && total == that.total && isDone == that.isDone && creationTime == that.creationTime && Objects.equals(configuration, that.configuration);
     }
 
     public int hashCode() {

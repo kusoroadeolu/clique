@@ -74,6 +74,7 @@ public final class ProgressBarConfiguration {
     private final MarkupParser parser;
     private final List<ProgressBarPredicate> styles;
     private final EasingConfiguration easingConfiguration;
+    private final int tickPerUnit;
 
 
     private ProgressBarConfiguration(ProgressBarConfigurationBuilder builder) {
@@ -84,6 +85,7 @@ public final class ProgressBarConfiguration {
         this.parser = builder.parser;
         this.styles = Collections.unmodifiableList(builder.styles);
         this.easingConfiguration = builder.easing;
+        this.tickPerUnit = builder.tickPerUnit;
     }
 
     /**
@@ -195,29 +197,42 @@ public final class ProgressBarConfiguration {
         return easingConfiguration;
     }
 
-    @Override
-    public boolean equals(Object object) {
-        if (object == null || getClass() != object.getClass()) return false;
+    /**
+     * Returns the number of ticks that represent one logical unit of progress.
+     *
+     * <p>Used to compute the {@code :units} and {@code :total-units} format tokens,
+     * which display progress scaled to a user-defined unit rather than raw ticks.
+     *
+     * @return the ticks-per-unit value; always {@code >= 1}
+     */
+    public int getTicksPerUnit() {
+        return tickPerUnit;
+    }
 
-        ProgressBarConfiguration that = (ProgressBarConfiguration) object;
-        return length == that.length && complete == that.complete && incomplete == that.incomplete && Objects.equals(format, that.format) && Objects.equals(parser, that.parser) && styles.equals(that.styles) && Objects.equals(easingConfiguration, that.easingConfiguration);
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ProgressBarConfiguration that = (ProgressBarConfiguration) o;
+        return length == that.length && complete == that.complete && incomplete == that.incomplete && tickPerUnit == that.tickPerUnit && format.equals(that.format) && parser.equals(that.parser) && styles.equals(that.styles) && easingConfiguration.equals(that.easingConfiguration);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(length, complete, incomplete, format, parser, styles, easingConfiguration);
+        return Objects.hash(length, complete, incomplete, format, parser, styles, easingConfiguration, tickPerUnit);
     }
 
     @Override
     public String toString() {
         return "ProgressBarConfiguration[" +
-                "height=" + length +
+                "length=" + length +
                 ", complete=" + complete +
                 ", incomplete=" + incomplete +
                 ", format='" + format + '\'' +
                 ", parser=" + parser +
                 ", styles=" + styles +
                 ", easingConfiguration=" + easingConfiguration +
+                ", ticksPerUnit=" + tickPerUnit +
                 ']';
     }
 
@@ -230,39 +245,103 @@ public final class ProgressBarConfiguration {
         private int length = 40;
         private char complete = '█';
         private char incomplete = '░';
+        private int tickPerUnit = 1;
         private String format = ":bar :percent% [:elapsed/:remaining]";
         private MarkupParser parser = MarkupParser.DEFAULT;
-        private List<ProgressBarPredicate> styles = new ArrayList<>();
+        private final List<ProgressBarPredicate> styles = new ArrayList<>();
         private EasingConfiguration easing = EasingConfiguration.DEFAULT;
         private static final String FORMAT_ERR_MESSAGE = "Format cannot be null";
 
+        /**
+         * Sets the character length of the bar segment rendered for {@code :bar}.
+         *
+         * @param length the bar length; must be {@code >= 0}
+         * @return this builder
+         * @throws IllegalArgumentException if {@code length} is negative
+         */
         public ProgressBarConfigurationBuilder length(int length) {
             if (length < 0) throw new IllegalArgumentException("Length must be positive");
             this.length = length;
             return this;
         }
 
+        /**
+         * Sets the character used to represent completed progress in the bar segment.
+         *
+         * @param complete the completion character
+         * @return this builder
+         */
         public ProgressBarConfigurationBuilder complete(char complete) {
             this.complete = complete;
             return this;
         }
 
+        /**
+         * Sets the number of ticks that represent one logical unit of progress.
+         *
+         * <p>For example, if each tick represents one byte and you want to display
+         * progress in kilobytes, set this to {@code 1024}.
+         *
+         * @param ticksPerUnit the ticks-per-unit value; must be {@code >= 1}
+         * @return this builder
+         * @throws IllegalArgumentException if {@code tickPerUnit} is less than {@code 1}
+         */
+        public ProgressBarConfigurationBuilder ticksPerUnit(int ticksPerUnit) {
+            if (ticksPerUnit <= 0) throw new IllegalArgumentException("Tick per unit cannot be less than 0");
+            this.tickPerUnit = ticksPerUnit;
+            return this;
+        }
+
+        /**
+         * Sets the character used to represent remaining progress in the bar segment.
+         *
+         * @param incomplete the incomplete character
+         * @return this builder
+         */
         public ProgressBarConfigurationBuilder incomplete(char incomplete) {
             this.incomplete = incomplete;
             return this;
         }
 
+        /**
+         * Sets the default format string used to render the progress bar.
+         *
+         * <p>See {@link ProgressBarConfiguration} for the list of supported tokens.
+         *
+         * @param format the format string; must not be {@code null}
+         * @return this builder
+         * @throws NullPointerException if {@code format} is {@code null}
+         */
         public ProgressBarConfigurationBuilder format(String format) {
             requireNonNull(format, FORMAT_ERR_MESSAGE);
             this.format = format;
             return this;
         }
 
+        /**
+         * Sets the markup parser used to interpret inline style tags in progress bar
+         *
+         * @param parser the parser to use; must not be {@code null}
+         * @return this builder
+         * @throws NullPointerException if {@code parser} is {@code null}
+         */
         public ProgressBarConfigurationBuilder parser(MarkupParser parser) {
-            this.parser = parser;
+            this.parser = Objects.requireNonNull(parser);
             return this;
         }
 
+        /**
+         * Registers a conditional format that is applied when {@code condition} matches
+         * the current completion percentage.
+         *
+         * <p>Predicates are evaluated in registration order; the first match wins.
+         * If no predicate matches, the default format set via {@link #format(String)} is used.
+         *
+         * @param condition a predicate over the completion percentage {@code [0, 100]}; must not be {@code null}
+         * @param format    the format string to use when the condition matches; must not be {@code null}
+         * @return this builder
+         * @throws NullPointerException if {@code condition} or {@code format} is {@code null}
+         */
         public ProgressBarConfigurationBuilder styleWhen(Predicate<Integer> condition, String format) {
             requireNonNull(format, FORMAT_ERR_MESSAGE);
             requireNonNull(condition, "Condition cannot be null");
@@ -270,24 +349,60 @@ public final class ProgressBarConfiguration {
             return this;
         }
 
+
+        /**
+         * Registers a conditional format applied when the completion percentage falls within
+         * {@code [min, max]}, inclusive.
+         *
+         * <p>Delegates to {@link #styleWhen(Predicate, String)}.
+         *
+         * @param min    the lower bound of the percentage range; must be {@code >= 0}
+         * @param max    the upper bound of the percentage range
+         * @param format the format string to use within this range; must not be {@code null}
+         * @return this builder
+         * @throws IllegalArgumentException if {@code min} is negative
+         * @throws NullPointerException     if {@code format} is {@code null}
+         */
         public ProgressBarConfigurationBuilder styleRange(int min, int max, String format) {
             requireNonNull(format, FORMAT_ERR_MESSAGE);
             if (min < 0) throw new IllegalArgumentException("Min must be positive");
             return this.styleWhen(p -> p >= min && p <= max, format);
         }
 
+        /**
+         * Adds a collection of {@link ProgressBarPredicate} style entries to this builder.
+         *
+         * <p>Predicates are appended in iteration order and evaluated after any previously
+         * registered styles.
+         *
+         * @param formats the style predicates to add; must not be {@code null}
+         * @return this builder
+         * @throws NullPointerException if {@code formats} is {@code null}
+         */
         public ProgressBarConfigurationBuilder styles(Collection<ProgressBarPredicate> formats) {
             requireNonNull(formats, "Format styles cannot be null");
-            this.styles = new ArrayList<>(formats);
+            this.styles.addAll(formats);
             return this;
         }
 
+        /**
+         * Sets the easing configuration applied during animated ticks.
+         *
+         * @param easing the easing configuration; must not be {@code null}
+         * @return this builder
+         * @throws NullPointerException if {@code easing} is {@code null}
+         */
         public ProgressBarConfigurationBuilder easing(EasingConfiguration easing) {
             requireNonNull(easing, "Easing configuration cannot be null");
             this.easing = easing;
             return this;
         }
 
+        /**
+         * Builds and returns a new {@link ProgressBarConfiguration} from the current builder state.
+         *
+         * @return a new {@code ProgressBarConfiguration}
+         */
         public ProgressBarConfiguration build() {
             return new ProgressBarConfiguration(this);
         }
