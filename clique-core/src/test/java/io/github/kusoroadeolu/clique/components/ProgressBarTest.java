@@ -198,7 +198,7 @@ class ProgressBarTest {
     void testTotalUnitsComesBeforeTotal() {
         ProgressBarConfiguration configuration = ProgressBarConfiguration.builder()
                 .format("[green]:bar :percent% :total :units/:total-units[/]")
-                .tickPerUnit(2)
+                .ticksPerUnit(2)
                 .build();
         ProgressBar bar = new ProgressBar(100, configuration);
         var str = bar.get();
@@ -209,7 +209,7 @@ class ProgressBarTest {
     void testUnitsIncrementsByTicksPerUnit() {
         ProgressBarConfiguration configuration = ProgressBarConfiguration.builder()
                 .format("[green]:bar :percent% :total :units/:total-units[/]")
-                .tickPerUnit(2)
+                .ticksPerUnit(2)
                 .build();
         ProgressBar bar = new ProgressBar(100, configuration);
         bar.tick(4, false);
@@ -220,14 +220,14 @@ class ProgressBarTest {
     void assertThrowsOnZeroTickPerUnit() {
         var builder = ProgressBarConfiguration.builder()
                 .format("[green]:bar :percent% :total :units/:total-units[/]");
-        assertThrows(IllegalArgumentException.class, () -> builder.tickPerUnit(0));
+        assertThrows(IllegalArgumentException.class, () -> builder.ticksPerUnit(0));
     }
 
     @Test
     void assertThrowsOnNegativeTickPerUnit() {
         var builder = ProgressBarConfiguration.builder()
                 .format("[green]:bar :percent% :total :units/:total-units[/]");
-        assertThrows(IllegalArgumentException.class, () -> builder.tickPerUnit(-1));
+        assertThrows(IllegalArgumentException.class, () -> builder.ticksPerUnit(-1));
     }
 
     @Test
