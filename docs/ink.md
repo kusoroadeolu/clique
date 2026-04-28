@@ -123,7 +123,24 @@ Applies a 24-bit background color using the provided RGB components. Requires tr
 Clique.ink().white().bgRgb(30, 30, 30).on("Dark background")
 ```
 
+#### `hex(String hexCode)`
+
+Applies a 24-bit foreground color using a hex color string. The string must be in `#RRGGBB` format. Requires truecolor terminal support.
+
+```java
+Clique.ink().hex("#FF5733").bold().on("Orange red")
+```
+
+#### `bgHex(String hexCode)`
+
+Applies a 24-bit background color using a hex color string. The string must be in `#RRGGBB` format. Requires truecolor terminal support.
+
+```java
+Clique.ink().hex("#FF5733").bold().on("Orange red")
+```
 ---
+
+
 
 ### Text Styles
 

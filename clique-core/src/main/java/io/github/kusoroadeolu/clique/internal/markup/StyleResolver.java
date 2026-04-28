@@ -7,7 +7,7 @@ import io.github.kusoroadeolu.clique.style.StyleBuilder;
 
 import java.util.List;
 
-import static io.github.kusoroadeolu.clique.internal.Constants.ZERO;
+import static io.github.kusoroadeolu.clique.internal.utils.Constants.ZERO;
 
 @InternalApi(since = "3.2.0")
 public final class StyleResolver {

@@ -1,4 +1,4 @@
-package io.github.kusoroadeolu.clique.internal;
+package io.github.kusoroadeolu.clique.internal.utils;
 
 import io.github.kusoroadeolu.clique.internal.documentation.InternalApi;
 
@@ -11,6 +11,7 @@ public class Constants {
     public static final char ANSI_END = 'm';
     public static final char ESC = '\u001b';
     public static final char LBRACKET = '[';
+    public static final String HASH = "#";
 
     //FOR ANSI DETECTOR
     public static final String TERM = "TERM";

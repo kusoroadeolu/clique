@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.regex.Pattern;
 
-import static io.github.kusoroadeolu.clique.internal.Constants.ESC;
+import static io.github.kusoroadeolu.clique.internal.utils.Constants.ESC;
 
 
 /**

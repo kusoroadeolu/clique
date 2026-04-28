@@ -7,7 +7,7 @@ import io.github.kusoroadeolu.clique.style.StyleBuilder;
 
 import java.util.Objects;
 
-import static io.github.kusoroadeolu.clique.internal.Constants.BLANK;
+import static io.github.kusoroadeolu.clique.internal.utils.Constants.BLANK;
 
 /**
  * A horizontal divider line that can optionally display a title.
