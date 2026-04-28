@@ -34,7 +34,6 @@ public final class CharWidth {
     private static final int[] SUPPLEMENTARY_ZERO_ENDS = {
             0x1F3FF, 0xE007F, 0xE01EF
     };
-    private static final String DEFAULT_ELLIPSIS = "...";
 
     static {
         // Initialize all BMP code points to width 1 (default)
@@ -176,63 +175,75 @@ public final class CharWidth {
             int charCount = Character.charCount(codePoint);
             int nextIdx = i + charCount;
 
-            boolean isCluster = false;
-
-            // Lookahead: Variation Selectors & Skin Tones
-            if (nextIdx < n) {
+            // Tag Sequences (Flags like England/Scotland) — must check before ZWJ
+            if (codePoint == 0x1F3F4 && nextIdx < n) {
                 int next = s.codePointAt(nextIdx);
-                if (next == 0xFE0F || (next >= 0x1F3FB && next <= 0x1F3FF) || next == 0x20E3) {
-                    width += 2;
-                    i = nextIdx + Character.charCount(next);
-                    isCluster = true;
-                    // Handle [Base] + VS16 + Keycap edge case
-                    if (next == 0xFE0F && i < n && s.codePointAt(i) == 0x20E3) {
-                        i += Character.charCount(0x20E3);
-                    }
-                }
-                // Lookahead: ZWJ Chain
-                else if (next == 0x200D) {
-                    width += 2;
-                    i = nextIdx;
-                    while (i < n && s.codePointAt(i) == 0x200D) {
-                        i += Character.charCount(0x200D); // skip ZWJ
-                        if (i < n) {
-                            int joined = s.codePointAt(i);
-                            i += Character.charCount(joined);
-                            // Skip modifiers on components (Skin tones/selectors)
-                            while (i < n) {
-                                int m = s.codePointAt(i);
-                                if (m == 0xFE0F || (m >= 0x1F3FB && m <= 0x1F3FF)) {
-                                    i += Character.charCount(m);
-                                } else break;
-                            }
-                        }
-                    }
-                    isCluster = true;
-                }
-
-                // Lookahead: Tag Sequences (Flags like England/Scotland)
-                else if (codePoint == 0x1F3F4 && next >= 0xE0020 && next <= 0xE007E) {
+                if (next >= 0xE0020 && next <= 0xE007E) {
                     width += 2;
                     i = nextIdx;
                     while (i < n && s.codePointAt(i) >= 0xE0020 && s.codePointAt(i) <= 0xE007F) {
                         i += Character.charCount(s.codePointAt(i));
                     }
-                    isCluster = true;
+                    continue;
                 }
             }
 
-            if (!isCluster) {
-                //Regional Indicator Pairs (Standard Country Flags)
-                if (isRegionalIndicator(codePoint) && nextIdx < n && isRegionalIndicator(s.codePointAt(nextIdx))) {
-                    width += 2;
-                    i = nextIdx + Character.charCount(s.codePointAt(nextIdx));
+            // Regional Indicator Pairs (Country Flags)
+            if (isRegionalIndicator(codePoint) && nextIdx < n && isRegionalIndicator(s.codePointAt(nextIdx))) {
+                width += 2;
+                i = nextIdx + Character.charCount(s.codePointAt(nextIdx));
+                continue;
+            }
+
+            // Consume any modifiers (VS16, skin tones) attached to this base char
+            int afterModifiers = nextIdx;
+            while (afterModifiers < n) {
+                int m = s.codePointAt(afterModifiers);
+                if (m == 0xFE0F || (m >= 0x1F3FB && m <= 0x1F3FF)) {
+                    afterModifiers += Character.charCount(m);
                 } else {
-                    // Standard Lookup
-                    width += ofCodePoint(codePoint);
-                    i += charCount;
+                    break;
                 }
             }
+
+            // Keycap: base + VS16 + 0x20E3
+            if (afterModifiers < n && s.codePointAt(afterModifiers) == 0x20E3) {
+                width += 2;
+                i = afterModifiers + Character.charCount(0x20E3);
+                continue;
+            }
+
+            // ZWJ Chain — entered if a ZWJ follows the base (after any modifiers)
+            if (afterModifiers < n && s.codePointAt(afterModifiers) == 0x200D) {
+                width += 2;
+                i = afterModifiers;
+                while (i < n && s.codePointAt(i) == 0x200D) {
+                    i += Character.charCount(0x200D); // skip ZWJ
+                    if (i < n) {
+                        int joined = s.codePointAt(i);
+                        i += Character.charCount(joined);
+                        // Skip modifiers on joined component
+                        while (i < n) {
+                            int m = s.codePointAt(i);
+                            if (m == 0xFE0F || (m >= 0x1F3FB && m <= 0x1F3FF)) {
+                                i += Character.charCount(m);
+                            } else break;
+                        }
+                    }
+                }
+                continue;
+            }
+
+            // Had modifiers but no ZWJ/keycap, treat as wide emoji presentation
+            if (afterModifiers > nextIdx) {
+                width += 2;
+                i = afterModifiers;
+                continue;
+            }
+
+            // Standard lookup
+            width += ofCodePoint(codePoint);
+            i += charCount;
         }
 
         return width;
