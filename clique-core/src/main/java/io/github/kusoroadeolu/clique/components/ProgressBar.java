@@ -165,7 +165,7 @@ public class ProgressBar implements Component {
             double t = i / (double) frames;
             double eased = easingConfig.getFunction().apply(t);  // Apply easing
 
-            this.currentTick = Math.clamp(startValue + (int)(diff * eased), ZERO, total);
+            this.currentTick = Math.clamp(startValue + (long) (diff * eased), ZERO, total);
 
             this.render();
 
