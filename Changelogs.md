@@ -252,5 +252,7 @@ _(no changes noted)_
 - `IterableProgressBar#printStream(PrintStream stream)` method for more control on iterable progress bar `PrintStream`
 - Added the new `Divider` component — a horizontal divider line with optional centered title and markup support
 - `DividerConfiguration` for customizing divider character, color, and parser
--  `Ink#hex(String hexCode)` for applying a 24-bit foreground color via a `#RRGGBB` hex string
-- -  `Ink#bgHex(String hexCode)` for applying a 24-bit background color via a `#RRGGBB` hex string
+- `Ink#hex(String hexCode)` for applying a 24-bit RGB foreground color via a `#RRGGBB` hex string
+- `Ink#bgHex(String hexCode)` for applying a 24-bit RGB background color via a `#RRGGBB` hex string
+- `Clique#hex(String hexCode)` and `Clique#hex(String hexCode, boolean background)` facade methods for hex color creation
+- `Clique#compose(AnsiCode...)` and `Clique#compose(Collection<AnsiCode>)` for combining multiple ANSI codes into one
