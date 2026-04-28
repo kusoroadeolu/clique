@@ -43,11 +43,5 @@ public class BorderChars {
     public void setTopRight(String topRight)     { this.topRight = topRight; }
     public void setBottomLeft(String bottomLeft) { this.bottomLeft = bottomLeft; }
     public void setBottomRight(String bottomRight){ this.bottomRight = bottomRight; }
-    public void setCorners(String edge){
-        setTopLeft(edge);
-        setTopRight(edge);
-        setBottomLeft(edge);
-        setBottomRight(edge);
-    }
 
 }

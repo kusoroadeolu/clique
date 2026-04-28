@@ -598,7 +598,7 @@ public final class Clique {
      * @return a new composite {@link AnsiCode}
      * @throws NullPointerException if {@code ansiCodes} is {@code null}
      */
-    public static AnsiCode compose(AnsiCode... ansiCodes) { return CliqueStyles.composite(ansiCodes); }
+    public static AnsiCode compose(AnsiCode... ansiCodes) { return CliqueStyles.compose(ansiCodes); }
 
     /**
      * Creates a composite {@link AnsiCode} that combines a collection of {@link AnsiCode} instances
@@ -608,7 +608,7 @@ public final class Clique {
      * @return a new composite {@link AnsiCode}
      * @throws NullPointerException if {@code ansiCodes} is {@code null}
      */
-    public static AnsiCode compose(Collection<AnsiCode> ansiCodes) { return CliqueStyles.composite(ansiCodes); }
+    public static AnsiCode compose(Collection<AnsiCode> ansiCodes) { return CliqueStyles.compose(ansiCodes); }
 
     // -------------------------------------------------------------------------
     // STYLE REGISTRATION
