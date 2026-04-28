@@ -228,29 +228,29 @@ public class ProgressBar implements Component {
 
     //Modified this to first check if we can tick by an actual valid value
     /**
-     * Advances the progress bar to completion and re-renders it.
+     * Advances the progress bar to completion and re-renders it to {@link System#out}.
      *
      * <p>Equivalent to ticking by {@code total - currentTick}. If the bar is already
-     * complete, this method ticks by {@code 1} to ensure a valid tick amount.
+     * complete, this method does not throw
      *
      * @return this instance
      */
     public ProgressBar complete() {
-        return this.tick(Math.max(1, total - currentTick));
+        return complete(true);
     }
 
     /**
      * Advances the progress bar to completion.
      *
      * <p>Equivalent to ticking by {@code total - currentTick}. If the bar is already
-     * complete, this method ticks by {@code 1} to ensure a valid tick amount.
+     * complete, this method does not throw
      *
      * @param render if the progress bar should be re-rendered to {@link System#out}
      *
      * @return this instance
      */
     public ProgressBar complete(boolean render) {
-        return this.tick(Math.max(1, total - currentTick), render);
+        return this.tick(Math.max(1, total - currentTick),  render);
     }
 
     private int percent() {
@@ -335,7 +335,7 @@ public class ProgressBar implements Component {
         var remaining = interval(this.remainingTime());
         format = format.replace(":remaining", remaining);
 
-        return parse(format, this.configuration.getParser());
+        return parse(format, configuration.getParser());
     }
 
     /**

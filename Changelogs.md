@@ -256,6 +256,11 @@ _(no changes noted)_
 - `Ink#bgHex(String hexCode)` for applying a 24-bit RGB background color via a `#RRGGBB` hex string
 - `Clique#hex(String hexCode)` and `Clique#hex(String hexCode, boolean background)` facade methods for hex color creation
 - `Clique#compose(AnsiCode...)` and `Clique#compose(Collection<AnsiCode>)` for combining multiple ANSI codes into one
+- Updated `CharWidth` utility to better support Unicode 17.0, specifically focusing on accurate column measurement for complex emojis.
+- Fixed ZWJ Sequence Over-counting. Resolved an issue where multi-person ZWJ sequences (e.g., families or modern 17.0 clusters) were incorrectly measured as multiple characters.
+
+
+
 
 ## clique-spi [2.0.2] - [UNRELEASED]
 _(no changes noted)_
