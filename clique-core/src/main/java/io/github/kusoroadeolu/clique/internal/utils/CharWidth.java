@@ -17,25 +17,14 @@ public final class CharWidth {
     private static final byte[] BMP_WIDTHS = new byte[0x10000];
     // Sorted start values of supplementary plane wide ranges
     private static final int[] SUPPLEMENTARY_WIDE_STARTS = {
-            0x1F000, // Mahjong Tiles, Domino Tiles
-            0x1F0A0, // Playing Cards
-            0x1F100, // Enclosed Alphanumeric Supplement
-            0x1F1E0, // Regional Indicator Symbols (Flags)
-            0x1F200, // Enclosed Ideographic Supplement
-            0x1F300, // Miscellaneous Symbols and Pictographs
-            0x1F600, // Emoticons
-            0x1F680, // Transport and Map Symbols
-            0x1F7E0,  // Colored circles/squares + heavy equals (E12–E14)
-            0x1F900, // Supplemental Symbols and Pictographs
-            0x1FA00, // Chess Symbols
-            0x1FA70, // Symbols and Pictographs Extended-A
-            0x20000 // CJK Unified Ideographs Extension B-F, CJK Compat Supplement
+            0x1F000, 0x1F100, 0x1F200, 0x1F300, 0x1F600, 0x1F680,
+            0x1F7E0, 0x1F900, 0x1FA00, 0x1FA70, 0x20000
     };
     private static final int[] SUPPLEMENTARY_WIDE_ENDS = {
-            0x1F02F, 0x1F0FF, 0x1F1DF, 0x1F1FF, 0x1F2FF,
-            0x1F5FF, 0x1F64F, 0x1F6FF,  0x1F7F0, 0x1F9FF, 0x1FA6F,
-            0x1FAFF, 0x2FA1F
+            0x1F0FF, 0x1F1FF, 0x1F2FF, 0x1F5FF, 0x1F67F, 0x1F6FF,
+            0x1F7FF, 0x1F9FF, 0x1FA6F, 0x1FAFF, 0x2FA1F
     };
+
     // Sorted start/end values of supplementary plane zero-width ranges
     private static final int[] SUPPLEMENTARY_ZERO_STARTS = {
             0x1F3FB, // Emoji Modifier Fitzpatrick Type-1-2 through Type-6 (skin tones)
@@ -45,7 +34,6 @@ public final class CharWidth {
     private static final int[] SUPPLEMENTARY_ZERO_ENDS = {
             0x1F3FF, 0xE007F, 0xE01EF
     };
-    private static final String DEFAULT_ELLIPSIS = "...";
 
     static {
         // Initialize all BMP code points to width 1 (default)
@@ -114,119 +102,20 @@ public final class CharWidth {
         // For U+2000-U+2BFF: only characters with East_Asian_Width=W or
         // Emoji_Presentation property (rendered as 2-wide by terminals).
         int[][] wideRanges = {
-                {0x231A, 0x231B},   // Watch, Hourglass
-                {0x23E9, 0x23EC},   // Fast-forward, Rewind, Fast-up, Fast-down
-                {0x23F0, 0x23F0},   // Alarm Clock
-                {0x23F3, 0x23F3},   // Hourglass Not Done
-                {0x25FD, 0x25FE},   // Medium Small Squares
-                {0x2614, 0x2615},   // Umbrella with Rain, Hot Beverage
-                {0x2630, 0x2637},   // Trigrams (EAW=W)
-                {0x2648, 0x2653},   // Zodiac Signs
-                {0x267F, 0x267F},   // Wheelchair Symbol
-                {0x268A, 0x268F},   // I Ching Monograms/Digrams (EAW=W)
-                {0x2693, 0x2693},   // Anchor
-                {0x26A1, 0x26A1},   // High Voltage
-                {0x26AA, 0x26AB},   // Medium White/Black Circle
-                {0x26BD, 0x26BE},   // Soccer Ball, Baseball
-                {0x26C4, 0x26C5},   // Snowman, Sun Behind Cloud
-                {0x26CE, 0x26CE},   // Ophiuchus
-                {0x26D4, 0x26D4},   // No Entry
-                {0x26EA, 0x26EA},   // Church
-                {0x26F2, 0x26F3},   // Fountain, Flag in Hole
-                {0x26F5, 0x26F5},   // Sailboat
-                {0x26FA, 0x26FA},   // Tent
-                {0x26FD, 0x26FD},   // Fuel Pump
-                {0x2705, 0x2705},   // White Heavy Check Mark
-                {0x270A, 0x270B},   // Raised Fist, Raised Hand
-                {0x2728, 0x2728},   // Sparkles
-                {0x274C, 0x274C},   // Cross Mark
-                {0x274E, 0x274E},   // Cross Mark Button
-                {0x2753, 0x2755},   // Question/Exclamation Ornaments
-                {0x2757, 0x2757},   // Heavy Exclamation Mark
-                {0x2795, 0x2797},   // Heavy Plus, Minus, Division
-                {0x27B0, 0x27B0},   // Curly Loop
-                {0x27BF, 0x27BF},   // Double Curly Loop
-                {0x2B05, 0x2B07},   // Arrows with emoji presentation
-                {0x2B1B, 0x2B1C},   // Large Black/White Square
-                {0x2B50, 0x2B50},   // Star
-                {0x2B55, 0x2B55},   // Heavy Large Circle
-                {0x2E80, 0x2FDF},   // CJK Radicals Supplement, Kangxi Radicals
-                {0x2FF0, 0x303E},   // CJK Symbols and Punctuation
-                {0x3041, 0x33FF},   // Hiragana, Katakana, Bopomofo, CJK Compatibility
-                {0x3400, 0x4DBF},   // CJK Unified Ideographs Extension A
-                {0x4E00, 0x9FFF},   // CJK Unified Ideographs
-                {0xA000, 0xA4CF},   // Yi Syllables and Radicals
-                {0xAC00, 0xD7AF},   // Hangul Syllables
-                {0xF900, 0xFAFF},   // CJK Compatibility Ideographs
-                {0xFF01, 0xFF60},   // Fullwidth Forms
-                {0xFFE0, 0xFFE6},   // Fullwidth Signs
-                {0x2194, 0x2199},   // Arrows
-                {0x21A9, 0x21AA},   // Arrows with hook
-                {0x231A, 0x231B},   // Already there — Watch, Hourglass
-                {0x2328, 0x2328},   // Keyboard
-                {0x23CF, 0x23CF},   // Eject Button
-                {0x23ED, 0x23EF},   // Skip buttons
-                {0x23F1, 0x23F2},   // Stopwatch, Timer
-                {0x23F8, 0x23FA},   // Pause, Stop, Record
-                {0x24C2, 0x24C2},   // Circled M
-                {0x25AA, 0x25AB},   // Small squares
-                {0x25B6, 0x25B6},   // Play Button
-                {0x25C0, 0x25C0},   // Reverse Button
-                {0x25FB, 0x25FE},   // Medium squares
-                {0x2600, 0x2604},   // Sun, Cloud, Umbrella, Snowman, Comet
-                {0x260E, 0x260E},   // Telephone
-                {0x2611, 0x2611},   // Ballot Box with Check
-                {0x2618, 0x2618},   // Shamrock
-                {0x261D, 0x261D},   // Index Pointing Up
-                {0x2620, 0x2620},   // Skull and Crossbones
-                {0x2622, 0x2623},   // Radioactive, Biohazard
-                {0x2626, 0x2626},   // Orthodox Cross
-                {0x262A, 0x262A},   // Star and Crescent
-                {0x262E, 0x262F},   // Peace Symbol, Yin Yang
-                {0x2638, 0x263A},   // Wheel of Dharma, Smiley
-                {0x2640, 0x2640},   // Female Sign
-                {0x2642, 0x2642},   // Male Sign
-                {0x265F, 0x2660},   // Chess Pawn, Spade Suit
-                {0x2663, 0x2663},   // Club Suit
-                {0x2665, 0x2666},   // Heart, Diamond Suit
-                {0x2668, 0x2668},   // Hot Springs
-                {0x267B, 0x267B},   // Recycling Symbol
-                {0x267E, 0x267E},   // Infinity
-                {0x2692, 0x2692},   // Hammer and Pick
-                {0x2694, 0x2697},   // Various tool/science symbols
-                {0x2699, 0x2699},   // Gear
-                {0x269B, 0x269C},   // Atom, Fleur-de-lis
-                {0x26A0, 0x26A0},   // Warning Sign
-                {0x26B0, 0x26B1},   // Coffin, Funeral Urn
-                {0x26C8, 0x26C8},   // Thunder Cloud
-                {0x26CF, 0x26D1},   // Pick, Rescue Worker Helmet
-                {0x26D3, 0x26D3},   // Chains
-                {0x26E9, 0x26E9},   // Shinto Shrine
-                {0x26F0, 0x26F1},   // Mountain, Umbrella on Ground
-                {0x26F4, 0x26F4},   // Ferry
-                {0x26F7, 0x26F9},   // Skier, Sled, Person Bouncing Ball
-                {0x2702, 0x2702},   // Scissors
-                {0x2708, 0x2708},   // Airplane
-                {0x2709, 0x2709},   // Envelope
-                {0x270C, 0x270D},   // Victory Hand, Writing Hand
-                {0x270F, 0x270F},   // Pencil
-                {0x2712, 0x2712},   // Black Nib
-                {0x2714, 0x2714},   // Heavy Check Mark
-                {0x2716, 0x2716},   // Heavy Multiplication
-                {0x271D, 0x271D},   // Latin Cross
-                {0x2721, 0x2721},   // Star of David
-                {0x2733, 0x2734},   // Eight Spoked/Pointed Asterisk
-                {0x2744, 0x2744},   // Snowflake
-                {0x2747, 0x2747},   // Sparkle
-                {0x2763, 0x2764},   // Heart Exclamation, Heart
-                {0x27A1, 0x27A1},   // Right Arrow
-                {0x2934, 0x2935},   // Arrows curving up/down
-                {0x2B05, 0x2B07},   // Already there
-                {0x2139, 0x2139},   // Information
-                {0x3030, 0x3030},   // Wavy Dash
-                {0x303D, 0x303D},   // Part Alternation Mark
-                {0x3297, 0x3297},   // Circled Ideograph Congratulation
-                {0x3299, 0x3299}   // Circled Ideograph Secret
+                // CJK and legacy wide blocks
+                {0x2E80, 0x2FDF}, {0x2FF0, 0x303E}, {0x3041, 0x33FF}, {0x3400, 0x4DBF},
+                {0x4E00, 0x9FFF}, {0xA000, 0xA4CF}, {0xAC00, 0xD7AF}, {0xF900, 0xFAFF},
+                {0xFF01, 0xFF60}, {0xFFE0, 0xFFE6},
+                // Emoji with Emoji_Presentation=Yes (Always Wide)
+                {0x231A, 0x231B}, {0x23E9, 0x23EC}, {0x23F0, 0x23F0}, {0x23F3, 0x23F3},
+                {0x25FD, 0x25FE}, {0x2614, 0x2615}, {0x2648, 0x2653}, {0x267F, 0x267F},
+                {0x2693, 0x2693}, {0x26A1, 0x26A1}, {0x26AA, 0x26AB}, {0x26BD, 0x26BE},
+                {0x26C4, 0x26C5}, {0x26CE, 0x26CE}, {0x26D4, 0x26D4}, {0x26EA, 0x26EA},
+                {0x26F2, 0x26F3}, {0x26F5, 0x26F5}, {0x26FA, 0x26FA}, {0x26FD, 0x26FD},
+                {0x2705, 0x2705}, {0x270A, 0x270B}, {0x2728, 0x2728}, {0x274C, 0x274C},
+                {0x274E, 0x274E}, {0x2753, 0x2755}, {0x2757, 0x2757}, {0x2795, 0x2797},
+                {0x27B0, 0x27B0}, {0x27BF, 0x27BF}, {0x2B1B, 0x2B1C}, {0x2B50, 0x2B50},
+                {0x2B55, 0x2B55}
         };
 
         for (int[] range : wideRanges) {
@@ -276,43 +165,66 @@ public final class CharWidth {
      * @return the total display width in terminal columns
      */
     public static int of(String s) {
-        if (s == null || s.isEmpty()) {
-            return 0;
-        }
+        if (s == null || s.isEmpty()) return 0;
         int width = 0;
         int i = 0;
-        while (i < s.length()) {
+        int n = s.length();
+
+        while (i < n) {
             int codePoint = s.codePointAt(i);
             int charCount = Character.charCount(codePoint);
-            int cpWidth = ofCodePoint(codePoint);
+            int nextIdx = i + charCount;
 
-            // ZWJ: skip its width and the following codepoint's width contribution
-            if (cpWidth == 0 && codePoint == 0x200D) {
-                i += charCount;
-                if (i < s.length()) {
-                    // Skip following codepoint (it joins the previous char)
-                    i += Character.charCount(s.codePointAt(i));
+            // Regional Indicator pair (country flags)
+            if (isRegionalIndicator(codePoint)) {
+                if (nextIdx < n && isRegionalIndicator(s.codePointAt(nextIdx))) {
+                    width += 2;
+                    i = nextIdx + Character.charCount(s.codePointAt(nextIdx));
+                } else {
+                    width += 1;
+                    i = nextIdx;
                 }
                 continue;
             }
 
-            // Regional Indicator pair: flag emoji = width 2
-            if (isRegionalIndicator(codePoint)) {
-                int nextIdx = i + charCount;
-                if (nextIdx < s.length()) {
-                    int next = s.codePointAt(nextIdx);
-                    if (isRegionalIndicator(next)) {
-                        width += 2; // Flag pair = single glyph, width 2
-                        i = nextIdx + Character.charCount(next);
-                        continue;
+            // Modifier/ZWJ cluster
+            int lookupIdx = nextIdx;
+            boolean hasCluster = false;
+
+            while (lookupIdx < n) {
+                int m = s.codePointAt(lookupIdx);
+                if (isModifier(m)) {
+                    lookupIdx += Character.charCount(m);
+                    hasCluster = true;
+                } else if (m == 0x200D) {
+                    lookupIdx += Character.charCount(m);
+                    if (lookupIdx < n) {
+                        int joined = s.codePointAt(lookupIdx);
+                        lookupIdx += Character.charCount(joined);
+                        // skip modifiers on joined component
+                        while (lookupIdx < n && isModifier(s.codePointAt(lookupIdx))) {
+                            lookupIdx += Character.charCount(s.codePointAt(lookupIdx));
+                        }
                     }
+                    hasCluster = true;
+                } else {
+                    break;
                 }
             }
 
-            width += cpWidth;
-            i += charCount;
+            width += hasCluster ? 2 : ofCodePoint(codePoint);
+            i = hasCluster ? lookupIdx : nextIdx;
         }
+
         return width;
+    }
+
+    private static boolean isModifier(int cp) {
+        return cp == 0xFE0F || (cp >= 0x1F3FB && cp <= 0x1F3FF);
+    }
+
+    private static boolean isTagCharacter(int cp) {
+        return cp >= 0xE0020 && cp <= 0xE007F;
     }
 
     /**
@@ -323,199 +235,6 @@ public final class CharWidth {
         return codePoint >= 0x1F1E6 && codePoint <= 0x1F1FF;
     }
 
-    /**
-     * Returns a substring that fits within the given display width,
-     * respecting code point and grapheme cluster boundaries.
-     * <p>
-     * If a wide character would exceed maxWidth, it is not included.
-     * ZWJ sequences are kept intact - truncation happens at the last
-     * safe break point before the ZWJ sequence if it wouldn't fit.
-     *
-     * @param s        the source string
-     * @param maxWidth the maximum display width in columns
-     * @return a substring fitting within maxWidth columns
-     */
-    public static String substringByWidth(String s, int maxWidth) {
-        if (s == null || s.isEmpty() || maxWidth <= 0) {
-            return "";
-        }
-        int width = 0;
-        int i = 0;
-        int lastSafeBreak = 0;
-        boolean inZwjSequence = false;
-
-        while (i < s.length()) {
-            int codePoint = s.codePointAt(i);
-            int charCount = Character.charCount(codePoint);
-            int cpWidth = ofCodePoint(codePoint);
-            // Track ZWJ sequences to avoid breaking in the middle
-            if (codePoint == 0x200D) {
-                // ZWJ - we're in a sequence, don't update safe break point
-                inZwjSequence = true;
-                i += charCount;
-                continue;
-            }
-
-            // If we just finished a ZWJ sequence (current char is not ZWJ)
-            // and we're not about to start another one
-            if (inZwjSequence) {
-                // We're processing the character after ZWJ
-                // Skip width contribution (it joins with previous)
-                i += charCount;
-                // Check if next character is also ZWJ to continue sequence
-                if (i < s.length() && s.codePointAt(i) != 0x200D) {
-                    inZwjSequence = false;
-                    // After exiting ZWJ sequence, this is a safe break point
-                    lastSafeBreak = i;
-                }
-                continue;
-            }
-            // Check if adding this character would exceed max width
-            if (width + cpWidth > maxWidth) {
-                break;
-            }
-            // Check if this starts a ZWJ sequence
-            int nextIdx = i + charCount;
-            if (nextIdx < s.length() && s.codePointAt(nextIdx) == 0x200D) {
-                // This character starts a ZWJ sequence
-                // Only commit to it if we have room
-                int sequenceWidth = measureZwjSequence(s, i);
-                if (width + sequenceWidth > maxWidth) {
-                    // ZWJ sequence won't fit, stop here
-                    break;
-                }
-                // Mark we're entering a ZWJ sequence (safe break was before this char)
-                inZwjSequence = true;
-            }
-
-            width += cpWidth;
-            i += charCount;
-            // Update safe break point for non-ZWJ characters
-            if (!inZwjSequence) {
-                lastSafeBreak = i;
-            }
-        }
-
-        // If we broke inside a ZWJ sequence, use the last safe break
-        if (inZwjSequence) {
-            return s.substring(0, lastSafeBreak);
-        }
-
-        return s.substring(0, i);
-    }
-
-    /**
-     * Measures the display width of a ZWJ sequence starting at the given index.
-     */
-    private static int measureZwjSequence(String s, int start) {
-        int i = start;
-        int width = 0;
-        boolean first = true;
-
-        while (i < s.length()) {
-            int codePoint = s.codePointAt(i);
-            int charCount = Character.charCount(codePoint);
-
-            if (codePoint == 0x200D) {
-                // ZWJ itself has no width
-                i += charCount;
-                continue;
-            }
-
-            if (first) {
-                // First character of sequence contributes width
-                width = ofCodePoint(codePoint);
-                first = false;
-            }
-            // Subsequent characters joined by ZWJ don't add width
-
-            i += charCount;
-
-            // Check if next is ZWJ to continue sequence
-            if (i >= s.length() || s.codePointAt(i) != 0x200D) {
-                break;
-            }
-        }
-
-        return width;
-    }
-
-    /**
-     * Returns a substring starting from the end that fits within the given display width.
-     *
-     * @param s        the source string
-     * @param maxWidth the maximum display width in columns
-     * @return a suffix substring fitting within maxWidth columns
-     */
-    public static String substringByWidthFromEnd(String s, int maxWidth) {
-        if (s == null || s.isEmpty() || maxWidth <= 0) {
-            return Constants.EMPTY;
-        }
-        int i = s.length();
-        int width = 0;
-        while (i > 0) {
-            int codePoint = s.codePointBefore(i);
-            int charWidth = ofCodePoint(codePoint);
-            if (width + charWidth > maxWidth) {
-                break;
-            }
-            width += charWidth;
-            i -= Character.charCount(codePoint);
-        }
-        return s.substring(i);
-    }
-
-    /**
-     * Truncates a string to fit within the given display width, adding an ellipsis.
-     * <p>
-     * Uses the default ellipsis ("...").
-     *
-     * @param s        the source string
-     * @param maxWidth the maximum display width in columns (must be at least ellipsis width)
-     * @param position where to place the ellipsis
-     * @return the truncated string with ellipsis, or the original if it fits
-     */
-    public static String truncateWithEllipsis(String s, int maxWidth, TruncatePosition position) {
-        return truncateWithEllipsis(s, maxWidth, DEFAULT_ELLIPSIS, position);
-    }
-
-    /**
-     * Truncates a string to fit within the given display width, adding a custom ellipsis.
-     *
-     * @param s        the source string
-     * @param maxWidth the maximum display width in columns (must be at least ellipsis width)
-     * @param ellipsis the ellipsis string to use (e.g., "...", "…", ">>")
-     * @param position where to place the ellipsis
-     * @return the truncated string with ellipsis, or the original if it fits
-     */
-    public static String truncateWithEllipsis(String s, int maxWidth, String ellipsis, TruncatePosition position) {
-        if (s == null || s.isEmpty()) {
-            return Constants.EMPTY;
-        }
-        int stringWidth = of(s);
-        if (stringWidth <= maxWidth) {
-            return s;
-        }
-
-        int ellipsisWidth = of(ellipsis);
-        if (maxWidth <= ellipsisWidth) {
-            // Not enough room for ellipsis, just clip
-            return substringByWidth(s, maxWidth);
-        }
-
-        int availableWidth = maxWidth - ellipsisWidth;
-
-        return switch (position) {
-            case START -> ellipsis + substringByWidthFromEnd(s, availableWidth);
-            case MIDDLE -> {
-                int leftWidth = (availableWidth + 1) / 2;
-                int rightWidth = availableWidth / 2;
-                yield substringByWidth(s, leftWidth) + ellipsis + substringByWidthFromEnd(s, rightWidth);
-            }
-
-            case END -> substringByWidth(s, availableWidth) + ellipsis;
-        };
-    }
 
     private static boolean inRanges(int codePoint, int[] starts, int[] ends) {
         int idx = Arrays.binarySearch(starts, codePoint);
@@ -527,23 +246,5 @@ public final class CharWidth {
         int insertionPoint = -(idx + 1);
         // Check if codePoint falls within the preceding range
         return insertionPoint > 0 && codePoint <= ends[insertionPoint - 1];
-    }
-
-    /**
-     * Truncation position for ellipsis.
-     */
-    public enum TruncatePosition {
-        /**
-         * Truncate at end: "Hello..."
-         */
-        END,
-        /**
-         * Truncate at start: "...World"
-         */
-        START,
-        /**
-         * Truncate in middle: "Hel...rld"
-         */
-        MIDDLE
     }
 }
