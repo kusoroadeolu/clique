@@ -7,7 +7,7 @@ import io.github.kusoroadeolu.clique.parser.MarkupParser;
 
 import java.util.List;
 
-import static io.github.kusoroadeolu.clique.internal.Constants.ZERO;
+import static io.github.kusoroadeolu.clique.internal.utils.Constants.ZERO;
 import static io.github.kusoroadeolu.clique.internal.utils.StringUtils.parseToCell;
 import static io.github.kusoroadeolu.clique.parser.MarkupParser.DEFAULT;
 

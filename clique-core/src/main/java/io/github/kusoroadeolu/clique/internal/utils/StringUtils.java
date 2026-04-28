@@ -2,19 +2,19 @@ package io.github.kusoroadeolu.clique.internal.utils;
 
 
 import io.github.kusoroadeolu.clique.internal.Cell;
+import io.github.kusoroadeolu.clique.internal.RGBColor;
 import io.github.kusoroadeolu.clique.internal.documentation.InternalApi;
 import io.github.kusoroadeolu.clique.parser.MarkupParser;
 import io.github.kusoroadeolu.clique.spi.AnsiCode;
 
 import java.util.Objects;
 
-import static io.github.kusoroadeolu.clique.internal.Constants.*;
+import static io.github.kusoroadeolu.clique.internal.utils.Constants.*;
 import static io.github.kusoroadeolu.clique.internal.utils.AnsiDetector.ansiEnabled;
 import static io.github.kusoroadeolu.clique.style.StyleCode.RESET;
 
 @InternalApi(since = "3.2.0")
 public final class StringUtils {
-
     private StringUtils(){}
 
     public static void clearStringBuilder(StringBuilder sb) {
@@ -53,12 +53,24 @@ public final class StringUtils {
         return pos < s.length() && s.charAt(pos) == ch;
     }
 
-    public static String format(StringBuilder sb, String text, AnsiCode... ansiCodes) {
-        style(text, sb, ansiCodes);
-        String result = sb.toString();
-        clearStringBuilder(sb);
-        return result;
+
+    public static AnsiCode hex(String hex){
+        return hexBase(hex, false);
     }
+
+    public static AnsiCode bgHex(String hex){
+        return hexBase(hex, true);
+    }
+
+    public static AnsiCode hexBase(String hex, boolean background){
+        if (hex.isBlank()) return () -> EMPTY;
+        if (!hex.startsWith(HASH) || hex.length() != 7) throw new IllegalArgumentException("Invalid hex color: expected format '#RRGGBB' but got '" + hex + "'");
+        int red = Integer.parseInt(hex.substring(1, 3), 16);
+        int green = Integer.parseInt(hex.substring(3, 5), 16);
+        int blue = Integer.parseInt(hex.substring(5, 7), 16);
+        return new RGBColor(red, green, blue, background);
+    }
+
 
 
     public static String formatAndReset(StringBuilder sb, String text, AnsiCode... ansiCodes) {

@@ -11,8 +11,8 @@ import io.github.kusoroadeolu.clique.style.StyleCode;
 
 import java.util.List;
 
-import static io.github.kusoroadeolu.clique.internal.Constants.BLANK;
-import static io.github.kusoroadeolu.clique.internal.Constants.NEWLINE;
+import static io.github.kusoroadeolu.clique.internal.utils.Constants.BLANK;
+import static io.github.kusoroadeolu.clique.internal.utils.Constants.NEWLINE;
 import static io.github.kusoroadeolu.clique.internal.utils.StringUtils.clearStringBuilder;
 import static io.github.kusoroadeolu.clique.internal.utils.StringUtils.formatAndReset;
 

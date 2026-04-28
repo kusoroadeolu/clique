@@ -2,7 +2,7 @@ package io.github.kusoroadeolu.clique.internal.utils;
 
 import io.github.kusoroadeolu.clique.internal.documentation.InternalApi;
 
-import static io.github.kusoroadeolu.clique.internal.Constants.*;
+import static io.github.kusoroadeolu.clique.internal.utils.Constants.*;
 
 @InternalApi(since = "3.2.0")
 public class AnsiDetector {

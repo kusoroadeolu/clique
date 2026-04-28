@@ -9,8 +9,8 @@ import java.io.PrintStream;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
-import static io.github.kusoroadeolu.clique.internal.Constants.BLANK;
-import static io.github.kusoroadeolu.clique.internal.Constants.ZERO;
+import static io.github.kusoroadeolu.clique.internal.utils.Constants.BLANK;
+import static io.github.kusoroadeolu.clique.internal.utils.Constants.ZERO;
 import static io.github.kusoroadeolu.clique.internal.utils.StringUtils.parse;
 
 /**

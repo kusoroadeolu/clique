@@ -2,7 +2,7 @@ package io.github.kusoroadeolu.clique.internal.markup;
 
 import io.github.kusoroadeolu.clique.internal.documentation.InternalApi;
 
-import static io.github.kusoroadeolu.clique.internal.Constants.LBRACKET;
+import static io.github.kusoroadeolu.clique.internal.utils.Constants.LBRACKET;
 
 @InternalApi(since = "3.2.0")
 public class MarkupPostProcessor {

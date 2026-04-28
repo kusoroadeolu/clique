@@ -4,9 +4,11 @@ import io.github.kusoroadeolu.clique.configuration.StyleContext;
 import io.github.kusoroadeolu.clique.internal.Gradient;
 import io.github.kusoroadeolu.clique.internal.Hyperlink;
 import io.github.kusoroadeolu.clique.internal.RGBColor;
+import io.github.kusoroadeolu.clique.internal.documentation.Experimental;
 import io.github.kusoroadeolu.clique.internal.documentation.Stable;
 import io.github.kusoroadeolu.clique.internal.documentation.Unstable;
 import io.github.kusoroadeolu.clique.internal.markup.PredefinedStyleContext;
+import io.github.kusoroadeolu.clique.internal.utils.StringUtils;
 import io.github.kusoroadeolu.clique.spi.AnsiCode;
 import io.github.kusoroadeolu.clique.spi.RGBAnsiCode;
 
@@ -186,11 +188,43 @@ public final class Ink {
      * @return a new {@code Ink} instance with the gradient accumulated
      * @throws NullPointerException if {@code from} or {@code to} is {@code null}
      */
-    @Unstable(since = "4.0.1")
+    @Stable(since = "4.0.1")
     public Ink gradient(RGBAnsiCode from, RGBAnsiCode to) {
         Objects.requireNonNull(from, "From RGB code cannot be null");
         Objects.requireNonNull(to, "To RGB code cannot be null");
         return with(new Gradient(from, to));
+    }
+
+    /**
+     * Applies a foreground hex color to this {@code Ink} instance.
+     *
+     * <p>The hex string must be in {@code #RRGGBB} format. The value is parsed
+     * into an {@link RGBColor} and applied to the rendered text.
+     *
+     * @param hexCode the hex color string; must not be {@code null} and must be in {@code #RRGGBB} format
+     * @return a new {@code Ink} instance with the hex color accumulated
+     * @throws NullPointerException     if {@code hexCode} is {@code null}
+     * @throws IllegalArgumentException if {@code hexCode} is not in {@code #RRGGBB} format
+     */
+    public Ink hex(String hexCode){
+        Objects.requireNonNull(hexCode);
+        return with(StringUtils.hex(hexCode));
+    }
+
+    /**
+     * Applies a background hex color to this {@code Ink} instance.
+     *
+     * <p>The hex string must be in {@code #RRGGBB} format. The value is parsed
+     * into an {@link RGBColor} and applied to the rendered text.
+     *
+     * @param hexCode the hex color string; must not be {@code null} and must be in {@code #RRGGBB} format
+     * @return a new {@code Ink} instance with the hex color accumulated
+     * @throws NullPointerException     if {@code hexCode} is {@code null}
+     * @throws IllegalArgumentException if {@code hexCode} is not in {@code #RRGGBB} format
+     */
+    public Ink bgHex(String hexCode){
+        Objects.requireNonNull(hexCode);
+        return with(StringUtils.bgHex(hexCode));
     }
 
 
@@ -203,7 +237,9 @@ public final class Ink {
     public Ink cyan()          { return with(ColorCode.CYAN);           }
     public Ink white()         { return with(ColorCode.WHITE);          }
 
-    public Ink rgb(int red, int green, int blue) {return with(new RGBColor(red, green, blue));}
+    public Ink rgb(int red, int green, int blue) {
+        return with(new RGBColor(red, green, blue));
+    }
 
     // Bright foreground colors
     public Ink brightBlack()   { return with(ColorCode.BRIGHT_BLACK);   }
@@ -225,7 +261,9 @@ public final class Ink {
     public Ink bgCyan()          { return with(BackgroundCode.CYAN);           }
     public Ink bgWhite()         { return with(BackgroundCode.WHITE);          }
 
-    public Ink bgRgb(int red, int green, int blue) {return with(new RGBColor(red, green, blue, true));}
+    public Ink bgRgb(int red, int green, int blue) {
+        return with(new RGBColor(red, green, blue, true));
+    }
 
 
     public Ink brightBgBlack()   { return with(BackgroundCode.BRIGHT_BLACK);   }

@@ -5,7 +5,6 @@
  */
 package io.github.kusoroadeolu.clique.internal.utils;
 
-import io.github.kusoroadeolu.clique.internal.Constants;
 import io.github.kusoroadeolu.clique.internal.documentation.InternalApi;
 
 import java.util.Arrays;

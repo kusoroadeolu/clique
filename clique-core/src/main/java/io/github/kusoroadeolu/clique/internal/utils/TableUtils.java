@@ -7,7 +7,7 @@ import io.github.kusoroadeolu.clique.internal.documentation.InternalApi;
 import java.util.List;
 import java.util.Map;
 
-import static io.github.kusoroadeolu.clique.internal.Constants.BLANK;
+import static io.github.kusoroadeolu.clique.internal.utils.Constants.BLANK;
 
 @InternalApi(since = "3.2.0")
 public class TableUtils {

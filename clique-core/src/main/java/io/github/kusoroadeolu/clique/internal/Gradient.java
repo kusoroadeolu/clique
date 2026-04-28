@@ -1,5 +1,6 @@
 package io.github.kusoroadeolu.clique.internal;
 
+import io.github.kusoroadeolu.clique.internal.utils.Constants;
 import io.github.kusoroadeolu.clique.internal.utils.StringUtils;
 import io.github.kusoroadeolu.clique.spi.RGBAnsiCode;
 import io.github.kusoroadeolu.clique.style.StyleCode;

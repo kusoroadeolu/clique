@@ -11,8 +11,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import static io.github.kusoroadeolu.clique.internal.Constants.EMPTY;
-import static io.github.kusoroadeolu.clique.internal.Constants.NEWLINE;
+import static io.github.kusoroadeolu.clique.internal.utils.Constants.EMPTY;
+import static io.github.kusoroadeolu.clique.internal.utils.Constants.NEWLINE;
 
 /**
  * A tree component that renders hierarchical data as an indented, connector-linked structure.

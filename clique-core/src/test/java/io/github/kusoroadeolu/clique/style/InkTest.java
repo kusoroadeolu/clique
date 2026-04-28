@@ -182,6 +182,43 @@ class InkTest {
         }
     }
 
+    @Nested
+    class HexMethod {
+
+        @Test
+        void nullHexCode_throwsNullPointerEx() {
+            assertThrows(NullPointerException.class, () -> ink.hex(null));
+        }
+
+        @Test
+        void invalidFormat_missingHash_throwsIllegalArgumentEx() {
+            assertThrows(IllegalArgumentException.class, () -> ink.hex("FF5733"));
+        }
+
+        @Test
+        void invalidFormat_wrongLength_throwsIllegalArgumentEx() {
+            assertThrows(IllegalArgumentException.class, () -> ink.hex("#FF57"));
+        }
+
+        @Test
+        void validHex_wrapsValueWithReset() {
+            String result = ink.hex("#FF5733").on("hello");
+            assertTrue(result.endsWith(StyleCode.RESET.ansiSequence()));
+        }
+
+        @Test
+        void validHex_returnsNewInstance() {
+            Ink hexInk = ink.hex("#FF5733");
+            assertNotSame(ink, hexInk);
+        }
+
+        @Test
+        void validHex_originalNotMutated() {
+            ink.hex("#FF5733");
+            assertEquals("hello", ink.on("hello"));
+        }
+    }
+
     /**
      * Asserts that the given Ink instance, when called with on("x"),
      * produces the expected ANSI sequence wrapping "x".
