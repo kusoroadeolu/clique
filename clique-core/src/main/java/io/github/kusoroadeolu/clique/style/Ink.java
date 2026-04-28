@@ -227,7 +227,7 @@ public final class Ink {
      * @throws IllegalArgumentException if {@code hexCode} is not in {@code #RRGGBB} format
      */
     public Ink hex(String hexCode){
-        Objects.requireNonNull(hexCode);
+        Objects.requireNonNull(hexCode,"Hex code cannot be null");
         return with(StringUtils.hex(hexCode));
     }
 
@@ -312,15 +312,21 @@ public final class Ink {
         if (o == null || getClass() != o.getClass()) return false;
 
         Ink ink = (Ink) o;
-        return Objects.equals(codes, ink.codes) && Objects.equals(context, ink.context);
+        return Objects.equals(codes, ink.codes) && Objects.equals(context, ink.context) && Objects.equals(hyperlink, ink.hyperlink) && Objects.equals(gradient, ink.gradient);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hashCode(codes);
-        result = 31 * result + Objects.hashCode(context);
-        return result;
+        return Objects.hash(codes, context, hyperlink, gradient);
     }
 
-
+    @Override
+    public String toString() {
+        return "Ink[" +
+                "codes=" + codes +
+                ", context=" + context +
+                ", hyperlink=" + hyperlink +
+                ", gradient=" + gradient +
+                ']';
+    }
 }

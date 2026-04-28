@@ -121,9 +121,10 @@ public class ProgressBar implements Component {
      */
     public ProgressBar tick(int amount, boolean render){
         if (amount < 1) throw new IllegalArgumentException("Tick amount cannot be less than 1");
-        currentTick = Math.clamp(currentTick + (long) amount, ZERO, total);
+
+        if (!isDone) currentTick = Math.clamp(currentTick + (long) amount, ZERO, total);
         if (currentTick >= total && !isDone) isDone = true;
-        if (render) this.render();
+        if (render) render();
         return this;
     }
 
@@ -164,7 +165,7 @@ public class ProgressBar implements Component {
      * @throws IllegalArgumentException if {@code to} is less than {@code 0}
      */
     public ProgressBar tickTo(int to, boolean render){
-        if (to < 0) throw new IllegalArgumentException("Tick to cannot be less than zero");
+        if (to < 0) throw new IllegalArgumentException("Tick cannot be less than zero");
         currentTick = Math.clamp(to, ZERO, total);
         if (currentTick >= total && !isDone) isDone = true;
         if (render) this.render();
@@ -250,7 +251,7 @@ public class ProgressBar implements Component {
      * @return this instance
      */
     public ProgressBar complete(boolean render) {
-        return this.tick(Math.max(1, total - currentTick),  render);
+        return this.tick(Math.max(1, total - currentTick), render);
     }
 
     private int percent() {
@@ -284,14 +285,14 @@ public class ProgressBar implements Component {
     }
 
     private String alignRight(String text, int size) {
-        return BLANK.repeat(size - text.length()) + text;
+        return BLANK.repeat(Math.max(ZERO, size - text.length())) + text;
     }
 
     private Long remainingTime() {
+        if (currentTick <= ZERO || total <= ZERO) return null;
         var elapsed = elapsedTime();
-        var totalTime = (elapsed / (currentTick / (double) this.total)); // elapsed / (current tick / total ticks)
-        if (currentTick > 0 && total > 0) return (long) (totalTime - elapsed);
-        else return null;
+        var totalTime = elapsed / (currentTick / (double) total);
+        return (long) (totalTime - elapsed);
     }
 
     /**

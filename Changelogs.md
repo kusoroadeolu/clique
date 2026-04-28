@@ -258,7 +258,9 @@ _(no changes noted)_
 - `Clique#compose(AnsiCode...)` and `Clique#compose(Collection<AnsiCode>)` for combining multiple ANSI codes into one
 - Updated `CharWidth` utility to better support Unicode 17.0, specifically focusing on accurate column measurement for complex emojis.
 - Fixed ZWJ Sequence Over-counting. Resolved an issue where multi-person ZWJ sequences (e.g., families or modern 17.0 clusters) were incorrectly measured as multiple characters.
-
+- `ItemList#item(String content)` overload that reuses the last set symbol
+- Fixed ItemList to recursively set configuration now propagates to all descendants, not just immediate children
+- Fixed `Table#remove` — now index-based to avoid removing wrong cell when duplicates exist
 
 
 

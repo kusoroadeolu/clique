@@ -62,10 +62,11 @@ public class Divider implements Component {
 		int left = remaining / 2;
 		int right = remaining - left;
 
+        var dividerColor = configuration.getDividerColor();
 		return new StyleBuilder()
-                .appendAndReset(dividerChar.repeat(left), configuration.getDividerColor())
+                .appendAndReset(dividerChar.repeat(left), dividerColor)
 				.appendAndReset(content)
-				.appendAndReset(dividerChar.repeat(right), configuration.getDividerColor())
+				.appendAndReset(dividerChar.repeat(right), dividerColor)
 				.toString();
 	}
 
@@ -73,14 +74,16 @@ public class Divider implements Component {
 	 * Sets the title to display centered within the divider line.
 	 * <p>
 	 *
-	 * @param title the title to display; may be {@code null} to render a plain line
+     * @param title the title to display; must not be {@code null}
      *
+     * @throws NullPointerException if {@code title} is {@code null}
      * @throws IllegalArgumentException if the visible title length exceeds or is equal to the divider width
 	 * @return this divider instance
 	 */
 	public Divider title(String title) {
+        Objects.requireNonNull(title, "Divider title cannot be null");
         String visible = configuration.getParser().getOriginalString(title);
-        if (visible.length() >= width) {
+        if (visible.length() + 2 >= width) {
             throw new IllegalArgumentException(
                     "Title's visible length must be less than divider width."
             );

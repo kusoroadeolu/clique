@@ -102,6 +102,29 @@ public class IterableProgressBar<T> implements Iterable<T> {
         return progressBar.isDone();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+
+        IterableProgressBar<?> that = (IterableProgressBar<?>) o;
+        return consumed == that.consumed && Objects.equals(iterator, that.iterator) && Objects.equals(progressBar, that.progressBar) && Objects.equals(stream, that.stream);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(iterator, consumed, progressBar, stream);
+    }
+
+    @Override
+    public String toString() {
+        return "IterableProgressBar[" +
+                "iterator=" + iterator +
+                ", consumed=" + consumed +
+                ", progressBar=" + progressBar +
+                ", stream=" + stream +
+                ']';
+    }
+
     private record ProgressBarIterator<T>(IterableProgressBar<T> iterableProgressBar) implements Iterator<T> {
 
         @Override

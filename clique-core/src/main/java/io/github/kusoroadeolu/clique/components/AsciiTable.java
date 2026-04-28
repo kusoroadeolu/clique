@@ -38,7 +38,6 @@ public class AsciiTable extends AbstractTable {
         final int padding = this.configuration.getPadding();
         clearStringBuilder(sb);
 
-
         //Build
         tableBuilder.append(headerAndFooter).append(Constants.NEWLINE);
 
@@ -95,7 +94,7 @@ public class AsciiTable extends AbstractTable {
         if (!super.equals(object)) return false;
 
         AsciiTable that = (AsciiTable) object;
-        return corner.equals(that.corner) && Objects.equals(hLine, that.hLine) && Objects.equals(vLine, that.vLine);
+        return Objects.equals(corner, that.corner) && Objects.equals(hLine, that.hLine) && Objects.equals(vLine, that.vLine);
     }
 
     @Override

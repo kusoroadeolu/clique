@@ -39,6 +39,14 @@ public class WidthAwareList {
         }
     }
 
+    public void remove(int index) {
+        Cell c = this.list.get(index);
+        this.list.remove(index);
+
+        if (this.list.isEmpty()) this.longest = 0;
+        else if (c.width() == this.longest) this.longest = calculateLongest();
+    }
+
 
     //Gets the styled text from the table
     public String getStyledText(int pos) {
@@ -49,20 +57,6 @@ public class WidthAwareList {
         return this.list.get(pos);
     }
 
-
-    public void remove(Cell c) {
-        if (c == null) return;
-
-        final int len = c.width();
-        this.list.remove(c);
-
-        if (this.list.isEmpty()) {
-            this.longest = 0;
-        } else if(len == this.longest) {
-            this.longest = this.calculateLongest();
-        }
-
-    }
 
     public int longest() {
         return this.longest;
