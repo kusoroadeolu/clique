@@ -9,8 +9,8 @@ import io.github.kusoroadeolu.clique.spi.AnsiCode;
 
 import java.util.Objects;
 
-import static io.github.kusoroadeolu.clique.internal.utils.Constants.*;
 import static io.github.kusoroadeolu.clique.internal.utils.AnsiDetector.ansiEnabled;
+import static io.github.kusoroadeolu.clique.internal.utils.Constants.*;
 import static io.github.kusoroadeolu.clique.style.StyleCode.RESET;
 
 @InternalApi(since = "3.2.0")

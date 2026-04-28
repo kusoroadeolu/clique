@@ -1,9 +1,9 @@
 package io.github.kusoroadeolu.clique.components;
 
 import io.github.kusoroadeolu.clique.configuration.TableConfiguration;
-import io.github.kusoroadeolu.clique.internal.utils.Constants;
 import io.github.kusoroadeolu.clique.internal.WidthAwareList;
 import io.github.kusoroadeolu.clique.internal.documentation.Stable;
+import io.github.kusoroadeolu.clique.internal.utils.Constants;
 import io.github.kusoroadeolu.clique.spi.AnsiCode;
 
 import java.util.Objects;

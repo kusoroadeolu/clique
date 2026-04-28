@@ -13,8 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static io.github.kusoroadeolu.clique.internal.utils.Constants.*;
 import static io.github.kusoroadeolu.clique.internal.utils.BoxUtils.applyAnsiToBorders;
+import static io.github.kusoroadeolu.clique.internal.utils.Constants.*;
 import static io.github.kusoroadeolu.clique.internal.utils.StringUtils.parseToCell;
 import static io.github.kusoroadeolu.clique.style.StyleCode.RESET;
 
