@@ -154,7 +154,7 @@ public class DividerConfiguration {
 		 * @throws NullPointerException if {@code color} is {@code null}
 		 */
 		public DividerConfigurationBuilder dividerColor(String color) {
-			dividerColor(ParserUtils.getAnsiCodes(Objects.requireNonNull(color, "Color cannot be null.")));
+			dividerColor(ParserUtils.getAnsiCodes(Objects.requireNonNull(color, "Divider color cannot be null.")));
 			return this;
 		}
 
@@ -166,6 +166,7 @@ public class DividerConfiguration {
 		 * @throws NullPointerException if {@code c} is {@code null}
 		 */
 		public DividerConfigurationBuilder dividerChar(char c) {
+
 			this.dividerChar = c;
 			return this;
 		}
