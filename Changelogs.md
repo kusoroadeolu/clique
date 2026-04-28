@@ -245,7 +245,7 @@ _(no changes noted)_
 
 # Changelogs
 
-## Clique [4.0.2] - [UNRELEASED]
+## Clique [4.0.2] - 2026-04-29
 - `ProgressBar#tick(boolean render)` overloads to all tick methods to control if a tick should print to `System.out`
 - `ProgressBarConfiguration#ticksPerUnit(int)` with `:units` and `:total-units` format tokens, derived automatically from tick count
 - `IterableProgressBar#printStream(PrintStream stream)` method for more control on iterable progress bar `PrintStream`
@@ -263,5 +263,5 @@ _(no changes noted)_
 
 
 
-## clique-spi [2.0.2] - [UNRELEASED]
+## clique-spi [2.0.2] - 2026-04-29
 _(no changes noted)_
