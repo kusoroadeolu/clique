@@ -14,6 +14,8 @@ import static io.github.kusoroadeolu.clique.internal.utils.Constants.BLANK;
  * <p>
  * Divider renders a horizontal line of configurable width. When a title is
  * set via {@link #title(String)}, the title is centered within the divider line.
+ *
+ * @since 4.0.2
  */
 @Stable(since = "4.0.2")
 public class Divider implements Component {

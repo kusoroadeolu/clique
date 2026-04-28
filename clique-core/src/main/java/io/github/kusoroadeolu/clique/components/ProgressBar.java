@@ -120,9 +120,9 @@ public class ProgressBar implements Component {
      * @throws IllegalArgumentException if {@code amount} is less than {@code 1}
      */
     public ProgressBar tick(int amount, boolean render){
+        if (isDone) return this;
         if (amount < 1) throw new IllegalArgumentException("Tick amount cannot be less than 1");
-
-        if (!isDone) currentTick = Math.clamp(currentTick + (long) amount, ZERO, total);
+        currentTick = Math.clamp(currentTick + (long) amount, ZERO, total);
         if (currentTick >= total && !isDone) isDone = true;
         if (render) render();
         return this;
@@ -143,6 +143,7 @@ public class ProgressBar implements Component {
      * @return this instance
      */
     public ProgressBar tickAnimated(int amount) {
+        if (isDone) return this;
         var config = this.configuration;
         if (config != null && config.getEasing().shouldEase(amount)) {
             this.easeTick(amount, config.getEasing());
@@ -151,41 +152,6 @@ public class ProgressBar implements Component {
             return this.tick(amount);
         }
     }
-
-    /**
-     * Advances or rewinds the progress bar to the given tick position.
-     *
-     * <p>The current tick is clamped to {@code [0, total]}. If this call causes
-     * {@code currentTick >= total}, {@link #isDone()} will return {@code true} and
-     * a newline is emitted on the next render.
-     *
-     * @param to the tick position to move to; must be {@code >= 0}
-     * @param render if the progress bar should be re-rendered to {@link System#out}
-     * @return this instance
-     * @throws IllegalArgumentException if {@code to} is less than {@code 0}
-     */
-    public ProgressBar tickTo(int to, boolean render){
-        if (to < 0) throw new IllegalArgumentException("Tick cannot be less than zero");
-        currentTick = Math.clamp(to, ZERO, total);
-        if (currentTick >= total && !isDone) isDone = true;
-        if (render) this.render();
-        return this;
-    }
-
-    /**
-     * Advances or rewinds the progress bar to the given tick position and re-renders it to {@link System#out}.
-     *
-     * <p>Equivalent to {@link #tickTo(int, boolean) tickTo(to, true)}.
-     *
-     * @param to the tick position to move to; must be {@code >= 0}
-     * @return this instance
-     * @throws IllegalArgumentException if {@code to} is less than {@code 0}
-     */
-    public ProgressBar tickTo(int to){
-        return tickTo(to, true);
-    }
-
-
 
     private void easeTick(int amount, EasingConfiguration easingConfig) {
         int startValue = this.currentTick;
@@ -199,7 +165,7 @@ public class ProgressBar implements Component {
             double t = i / (double) frames;
             double eased = easingConfig.getFunction().apply(t);  // Apply easing
 
-            this.currentTick = startValue + (int) (diff * eased);
+            this.currentTick = Math.clamp(startValue + (int)(diff * eased), ZERO, total);
 
             this.render();
 
@@ -213,7 +179,10 @@ public class ProgressBar implements Component {
 
         // Ensure we end exactly at target
         this.currentTick = targetValue;
-        if (currentTick >= total && !isDone) isDone = true;
+        if (currentTick >= total && !isDone) {
+            isDone = true;
+            this.render();
+        }
     }
 
 
@@ -251,7 +220,7 @@ public class ProgressBar implements Component {
      * @return this instance
      */
     public ProgressBar complete(boolean render) {
-        return this.tick(Math.max(1, total - currentTick), render);
+        return tick(Math.max(1, total - currentTick), render);
     }
 
     private int percent() {
@@ -356,28 +325,27 @@ public class ProgressBar implements Component {
     }
 
 
-    //For tests
-    int currentTick(){
-        return currentTick;
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ProgressBar bar = (ProgressBar) o;
+        return total == bar.total && creationTime == bar.creationTime && currentTick == bar.currentTick && isDone == bar.isDone && Objects.equals(configuration, bar.configuration);
     }
 
-
-    public boolean equals(Object object) {
-        if (object == null || getClass() != object.getClass()) return false;
-        var that = (ProgressBar) object;
-        return currentTick == that.currentTick && total == that.total && isDone == that.isDone && creationTime == that.creationTime && Objects.equals(configuration, that.configuration);
-    }
-
+    @Override
     public int hashCode() {
-        return Objects.hash(currentTick, total, isDone, creationTime);
+        return Objects.hash(configuration, creationTime, total, currentTick, isDone);
     }
 
+    @Override
     public String toString() {
         return "ProgressBar[" +
-                "progress=" + currentTick +
-                ", total=" + total +
-                ", isDone=" + isDone +
+                "total=" + total +
                 ", creationTime=" + creationTime +
+                ", configuration=" + configuration +
+                ", currentTick=" + currentTick +
+                ", isDone=" + isDone +
                 ']';
     }
 }

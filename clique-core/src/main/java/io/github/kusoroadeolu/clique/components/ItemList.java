@@ -138,6 +138,7 @@ public class ItemList implements Component {
                 item.sublist().recursivelySetConfiguration(configuration);
             }
         }
+
         return this;
     }
 
