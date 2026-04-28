@@ -545,7 +545,7 @@ public final class Clique {
     public static void enableCliqueColors() { AnsiDetector.enableCliqueColors(); }
 
     // -------------------------------------------------------------------------
-    // RGB
+    // RGB & Ansi Helpers
     // -------------------------------------------------------------------------
 
     /**
@@ -554,7 +554,7 @@ public final class Clique {
      * @param r the red component (0–255)
      * @param g the green component (0–255)
      * @param b the blue component (0–255)
-     * @throws IllegalArgumentException if {@code r, g, b < 0 || r, g, b > 0}
+     * @throws IllegalArgumentException if {@code r, g, b < 0 || r, g, b > 255}
      * @return a new {@link RGBAnsiCode} for the foreground
      */
     public static RGBAnsiCode rgb(int r, int g, int b) { return CliqueStyles.rgb(r, g, b); }
@@ -565,11 +565,50 @@ public final class Clique {
      * @param r          the red component (0–255)
      * @param g          the green component (0–255)
      * @param b          the blue component (0–255)
-     * @throws IllegalArgumentException if {@code r, g, b < 0 || r, g, b > 0}
+     * @throws IllegalArgumentException if {@code r, g, b < 0 || r, g, b > 255}
      * @param background {@code true} to apply as a background color, {@code false} for foreground
      * @return a new {@link RGBAnsiCode}
      */
-    public static RGBAnsiCode rgb(int r, int g, int b, boolean background) { return CliqueStyles.rgb(r, g, b, background); }
+    /**
+     * Applies a 24-bit RGB foreground color via a {@code #RRGGBB} hex string.
+     *
+     * @param hexCode the hex color string; must not be {@code null} and must be in {@code #RRGGBB} format
+     * @return a new {@link RGBAnsiCode}
+     * @throws NullPointerException     if {@code hexCode} is {@code null}
+     * @throws IllegalArgumentException if {@code hexCode} is not in {@code #RRGGBB} format
+     */
+    public static RGBAnsiCode hex(String hexCode) { return CliqueStyles.hex(hexCode); }
+
+    /**
+     * Applies a 24-bit RGB color via a {@code #RRGGBB} hex string, optionally to the background.
+     *
+     * @param hexCode    the hex color string; must not be {@code null} and must be in {@code #RRGGBB} format
+     * @param background {@code true} to apply as a background color, {@code false} for foreground
+     * @return a new {@link RGBAnsiCode}
+     * @throws NullPointerException     if {@code hexCode} is {@code null}
+     * @throws IllegalArgumentException if {@code hexCode} is not in {@code #RRGGBB} format
+     */
+    public static RGBAnsiCode hex(String hexCode, boolean background) { return CliqueStyles.hex(hexCode, background); }
+
+    /**
+     * Creates a composite {@link AnsiCode} that combines multiple {@link AnsiCode} instances
+     * into a single sequence applied left to right.
+     *
+     * @param ansiCodes the codes to compose; must not be {@code null}
+     * @return a new composite {@link AnsiCode}
+     * @throws NullPointerException if {@code ansiCodes} is {@code null}
+     */
+    public static AnsiCode compose(AnsiCode... ansiCodes) { return CliqueStyles.composite(ansiCodes); }
+
+    /**
+     * Creates a composite {@link AnsiCode} that combines a collection of {@link AnsiCode} instances
+     * into a single sequence applied in iteration order.
+     *
+     * @param ansiCodes the codes to compose; must not be {@code null}
+     * @return a new composite {@link AnsiCode}
+     * @throws NullPointerException if {@code ansiCodes} is {@code null}
+     */
+    public static AnsiCode compose(Collection<AnsiCode> ansiCodes) { return CliqueStyles.composite(ansiCodes); }
 
     // -------------------------------------------------------------------------
     // STYLE REGISTRATION
