@@ -188,7 +188,7 @@ public final class StyleContext {
          * @throws NullPointerException if {@code style} or {@code code} is {@code null}
          */
         public StyleContextBuilder add(String style, Collection<AnsiCode> code) {
-            Objects.requireNonNull(style, "Style Name cannot be null");
+            Objects.requireNonNull(style, "Style name cannot be null");
             Objects.requireNonNull(code, "Ansi codes cannot be null");
             localStyles.put(style, new CompositeColor(code));
             return this;

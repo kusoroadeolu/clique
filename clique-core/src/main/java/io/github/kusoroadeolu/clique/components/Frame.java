@@ -51,8 +51,8 @@ public class Frame implements Component {
 
     public Frame(FrameConfiguration configuration, BoxType type) {
         this.nodes = new ArrayList<>();
-        this.configuration = Objects.requireNonNull(configuration, "Configuration cannot be null");;
-        this.type = Objects.requireNonNull(type, "Frame type cannot be null");;
+        this.configuration = Objects.requireNonNull(configuration, "Configuration cannot be null");
+        this.type = Objects.requireNonNull(type, "Frame type cannot be null");
         this.title = EMPTY;
         this.titleAlign = FrameAlign.CENTER;
         this.width = NO_WIDTH_SET;
