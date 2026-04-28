@@ -43,7 +43,7 @@ public interface Component {
      * <p>Equivalent to {@code render(System.out)}.
      */
     default void render() {
-        this.render(System.out);
+        render(System.out);
     }
 
     /**

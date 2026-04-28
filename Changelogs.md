@@ -247,7 +247,6 @@ _(no changes noted)_
 
 ## Clique [4.0.2] - [UNRELEASED]
 - `ProgressBar#tick(boolean render)` overloads to all tick methods to control if a tick should print to `System.out`
-- `ProgressBar#tickTo(int to)` to jump to a specific tick position; values below `0` throw, values above `total` clamp to `total`
 - `ProgressBarConfiguration#ticksPerUnit(int)` with `:units` and `:total-units` format tokens, derived automatically from tick count
 - `IterableProgressBar#printStream(PrintStream stream)` method for more control on iterable progress bar `PrintStream`
 - Added the new `Divider` component — a horizontal divider line with optional centered title and markup support
@@ -260,7 +259,7 @@ _(no changes noted)_
 - Fixed ZWJ Sequence Over-counting. Resolved an issue where multi-person ZWJ sequences (e.g., families or modern 17.0 clusters) were incorrectly measured as multiple characters.
 - `ItemList#item(String content)` overload that reuses the last set symbol
 - Fixed ItemList to recursively set configuration now propagates to all descendants, not just immediate children
-- Fixed `Table#remove` — now index-based to avoid removing wrong cell when duplicates exist
+- Fixed `Table#remove` to now be index-based to avoid removing wrong cell when duplicates exist
 
 
 

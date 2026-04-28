@@ -19,9 +19,8 @@ import java.util.Optional;
 /**
  * Main facade for the Clique library.
  *
- * <p>{@code Clique} provides static factory methods for all library components,
- * delegating to {@link CliqueStyles} for styling and {@link CliqueComponents} for
- * UI components. This is the primary entry point for interacting with Clique.</p>
+ * <p>{@code Clique} provides static factory methods for all library components.
+ * This is the primary entry point for interacting with Clique.</p>
  *
  * <p>Example usage:</p>
  * <pre>{@code
@@ -560,6 +559,7 @@ public final class Clique {
     public static RGBAnsiCode rgb(int r, int g, int b) { return CliqueStyles.rgb(r, g, b); }
 
     /**
+     *
      * Creates an RGB color, optionally applied to the background.
      *
      * @param r          the red component (0–255)
@@ -569,6 +569,9 @@ public final class Clique {
      * @param background {@code true} to apply as a background color, {@code false} for foreground
      * @return a new {@link RGBAnsiCode}
      */
+    public static RGBAnsiCode rgb(int r, int g, int b, boolean background) { return CliqueStyles.rgb(r, g, b, background); }
+
+
     /**
      * Applies a 24-bit RGB foreground color via a {@code #RRGGBB} hex string.
      *
