@@ -256,3 +256,6 @@ _(no changes noted)_
 - `Ink#bgHex(String hexCode)` for applying a 24-bit RGB background color via a `#RRGGBB` hex string
 - `Clique#hex(String hexCode)` and `Clique#hex(String hexCode, boolean background)` facade methods for hex color creation
 - `Clique#compose(AnsiCode...)` and `Clique#compose(Collection<AnsiCode>)` for combining multiple ANSI codes into one
+
+## clique-spi [2.0.2] - [UNRELEASED]
+_(no changes noted)_

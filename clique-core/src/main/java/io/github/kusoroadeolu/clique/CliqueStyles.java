@@ -59,18 +59,18 @@ final class CliqueStyles {
     }
 
     public static RGBAnsiCode hex(String hexCode) {
-        return (RGBAnsiCode) StringUtils.hex(Objects.requireNonNull(hexCode));
+        return StringUtils.hex(Objects.requireNonNull(hexCode));
     }
 
     public static RGBAnsiCode hex(String hexCode, boolean background) {
-        return (RGBAnsiCode) StringUtils.hexBase(Objects.requireNonNull(hexCode), background);
+        return StringUtils.hexBase(Objects.requireNonNull(hexCode), background);
     }
 
-    public static AnsiCode composite(AnsiCode... ansiCodes) {
+    public static AnsiCode compose(AnsiCode... ansiCodes) {
         return new CompositeColor(Objects.requireNonNull(ansiCodes));
     }
 
-    public static AnsiCode composite(Collection<AnsiCode> ansiCodes) {
+    public static AnsiCode compose(Collection<AnsiCode> ansiCodes) {
         return new CompositeColor(Objects.requireNonNull(ansiCodes));
     }
 

@@ -6,6 +6,7 @@ import io.github.kusoroadeolu.clique.internal.RGBColor;
 import io.github.kusoroadeolu.clique.internal.documentation.InternalApi;
 import io.github.kusoroadeolu.clique.parser.MarkupParser;
 import io.github.kusoroadeolu.clique.spi.AnsiCode;
+import io.github.kusoroadeolu.clique.spi.RGBAnsiCode;
 
 import java.util.Objects;
 
@@ -54,21 +55,25 @@ public final class StringUtils {
     }
 
 
-    public static AnsiCode hex(String hex){
+    public static RGBAnsiCode hex(String hex){
         return hexBase(hex, false);
     }
 
-    public static AnsiCode bgHex(String hex){
+    public static RGBAnsiCode bgHex(String hex){
         return hexBase(hex, true);
     }
 
-    public static AnsiCode hexBase(String hex, boolean background){
-        if (hex.isBlank()) return () -> EMPTY;
-        if (!hex.startsWith(HASH) || hex.length() != 7) throw new IllegalArgumentException("Invalid hex color: expected format '#RRGGBB' but got '" + hex + "'");
-        int red = Integer.parseInt(hex.substring(1, 3), 16);
-        int green = Integer.parseInt(hex.substring(3, 5), 16);
-        int blue = Integer.parseInt(hex.substring(5, 7), 16);
-        return new RGBColor(red, green, blue, background);
+    public static RGBAnsiCode hexBase(String hex, boolean background){
+        if (!hex.startsWith(HASH) || hex.length() != 7)
+            throw new IllegalArgumentException("Invalid hex color: expected '#RRGGBB' but got '" + hex + "'");
+        try {
+            int red   = Integer.parseInt(hex.substring(1, 3), 16);
+            int green = Integer.parseInt(hex.substring(3, 5), 16);
+            int blue  = Integer.parseInt(hex.substring(5, 7), 16);
+            return new RGBColor(red, green, blue, background);
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Invalid hex color: '" + hex + "' contains non-hex characters (expected '#RRGGBB')", e);
+        }
     }
 
 

@@ -512,7 +512,7 @@ public final class CharWidth {
                 int rightWidth = availableWidth / 2;
                 yield substringByWidth(s, leftWidth) + ellipsis + substringByWidthFromEnd(s, rightWidth);
             }
-            
+
             case END -> substringByWidth(s, availableWidth) + ellipsis;
         };
     }

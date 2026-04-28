@@ -186,12 +186,34 @@ public final class Ink {
      * @return a new {@code Ink} instance with the gradient accumulated
      * @throws NullPointerException if {@code from} or {@code to} is {@code null}
      */
-    @Stable(since = "4.0.1")
     public Ink gradient(RGBAnsiCode from, RGBAnsiCode to) {
         Objects.requireNonNull(from, "From RGB code cannot be null");
         Objects.requireNonNull(to, "To RGB code cannot be null");
         return with(new Gradient(from, to));
     }
+
+    /**
+     * Applies a color gradient to this {@code Ink} instance, transitioning
+     * from one hex code to another across the rendered text.
+     *
+     * <p>The gradient is computed by linearly interpolating the R, G, and B
+     * channels between {@code fromHex} and {@code toHex} across each visible character.
+     * Existing ANSI escape sequences embedded in the text are preserved and
+     * excluded from the interpolation; only printable characters are colorized.
+     * A {@code RESET} sequence is appended at the end of the output.
+     *
+     * @param fromHex the starting hexCode of the gradient; must not be {@code null}
+     * @param toHex   the ending hexCode of the gradient; must not be {@code null}
+     * @return a new {@code Ink} instance with the gradient accumulated
+     * @throws NullPointerException if {@code from} or {@code to} is {@code null}
+     */
+    public Ink gradient(String fromHex, String toHex) {
+        Objects.requireNonNull(fromHex, "From hex code cannot be null");
+        Objects.requireNonNull(toHex, "To hex code cannot be null");
+        return with(new Gradient(fromHex, toHex));
+    }
+
+
 
     /**
      * Applies a foreground hex color to this {@code Ink} instance.
