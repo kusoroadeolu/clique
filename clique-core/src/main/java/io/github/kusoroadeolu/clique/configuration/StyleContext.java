@@ -142,6 +142,7 @@ public final class StyleContext {
      */
     public static class StyleContextBuilder {
         private final Map<String, AnsiCode> localStyles;
+        private static final String NULL_STYLE_NAME = "Style name cannot be null";
 
         private StyleContextBuilder() {
             this.localStyles = new HashMap<>();
@@ -156,7 +157,7 @@ public final class StyleContext {
          * @throws NullPointerException if {@code style} or {@code code} is {@code null}
          */
         public StyleContextBuilder add(String style, AnsiCode code) {
-            Objects.requireNonNull(style, "Style name cannot be null");
+            Objects.requireNonNull(style, NULL_STYLE_NAME);
             Objects.requireNonNull(code, "Ansi code cannot be null");
             localStyles.put(style, code);
             return this;
@@ -172,7 +173,7 @@ public final class StyleContext {
          * @throws NullPointerException if {@code style} or {@code code} is {@code null}
          */
         public StyleContextBuilder add(String style, AnsiCode... code) {
-            Objects.requireNonNull(style, "Style name cannot be null");
+            Objects.requireNonNull(style, NULL_STYLE_NAME);
             Objects.requireNonNull(code, "Ansi codes cannot be null");
             localStyles.put(style, new CompositeColor(code));
             return this;
@@ -188,7 +189,7 @@ public final class StyleContext {
          * @throws NullPointerException if {@code style} or {@code code} is {@code null}
          */
         public StyleContextBuilder add(String style, Collection<AnsiCode> code) {
-            Objects.requireNonNull(style, "Style name cannot be null");
+            Objects.requireNonNull(style, NULL_STYLE_NAME);
             Objects.requireNonNull(code, "Ansi codes cannot be null");
             localStyles.put(style, new CompositeColor(code));
             return this;
@@ -205,7 +206,7 @@ public final class StyleContext {
          * @throws NullPointerException if {@code codes} is {@code null}
          */
         public StyleContextBuilder add(Map<String, AnsiCode> codes) {
-            Objects.requireNonNull(codes, "Map cannot be null");
+            Objects.requireNonNull(codes, "Ansi code map cannot be null");
             localStyles.putAll(codes);
             return this;
         }
