@@ -67,7 +67,7 @@ abstract non-sealed class AbstractTable implements Table {
 
         this.rows.remove(index);
         for (WidthAwareList cl : this.columns) {
-            cl.remove(cl.get(index));
+            cl.remove(index);
         }
         nullCachedString();
         return this;
@@ -75,7 +75,7 @@ abstract non-sealed class AbstractTable implements Table {
 
     public Table removeCell(int row, int col) {
         validateHeaders(row);
-        this.updateCell(row, col, this.configuration.getNullReplacement());
+        updateCell(row, col, this.configuration.getNullReplacement());
         return this;
     }
 

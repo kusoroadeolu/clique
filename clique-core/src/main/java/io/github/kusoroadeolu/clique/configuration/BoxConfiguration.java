@@ -186,8 +186,7 @@ public final class BoxConfiguration {
          * @throws NullPointerException if {@code borderColor} is {@code null}
          */
         public BoxConfigurationBuilder borderColor(AnsiCode... borderColor) {
-            Objects.requireNonNull(borderColor, "Border color cannot be null");
-            this.borderColor = borderColor;
+            this.borderColor = Objects.requireNonNull(borderColor, "Border color cannot be null");
             return this;
         }
 
@@ -199,8 +198,7 @@ public final class BoxConfiguration {
          * @throws NullPointerException if {@code textAlign} is {@code null}
          */
         public BoxConfigurationBuilder textAlign(TextAlign textAlign) {
-            Objects.requireNonNull(textAlign, "Text align cannot be null");
-            this.textAlign = textAlign;
+            this.textAlign = Objects.requireNonNull(textAlign, "Text align cannot be null");
             return this;
         }
 
@@ -213,8 +211,7 @@ public final class BoxConfiguration {
          * @throws NullPointerException if {@code parser} is {@code null}
          */
         public BoxConfigurationBuilder parser(MarkupParser parser) {
-            Objects.requireNonNull(parser, "Parser cannot be null");
-            this.parser = parser;
+            this.parser = Objects.requireNonNull(parser, "Markup parser cannot be null");
             return this;
         }
 

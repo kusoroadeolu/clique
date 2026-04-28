@@ -74,7 +74,7 @@ public final class ProgressBarConfiguration {
     private final MarkupParser parser;
     private final List<ProgressBarPredicate> styles;
     private final EasingConfiguration easingConfiguration;
-    private final int tickPerUnit;
+    private final int ticksPerUnit;
 
 
     private ProgressBarConfiguration(ProgressBarConfigurationBuilder builder) {
@@ -85,7 +85,7 @@ public final class ProgressBarConfiguration {
         this.parser = builder.parser;
         this.styles = Collections.unmodifiableList(builder.styles);
         this.easingConfiguration = builder.easing;
-        this.tickPerUnit = builder.tickPerUnit;
+        this.ticksPerUnit = builder.tickPerUnit;
     }
 
     /**
@@ -206,7 +206,7 @@ public final class ProgressBarConfiguration {
      * @return the ticks-per-unit value; always {@code >= 1}
      */
     public int getTicksPerUnit() {
-        return tickPerUnit;
+        return ticksPerUnit;
     }
 
     @Override
@@ -214,12 +214,12 @@ public final class ProgressBarConfiguration {
         if (o == null || getClass() != o.getClass()) return false;
 
         ProgressBarConfiguration that = (ProgressBarConfiguration) o;
-        return length == that.length && complete == that.complete && incomplete == that.incomplete && tickPerUnit == that.tickPerUnit && format.equals(that.format) && parser.equals(that.parser) && styles.equals(that.styles) && easingConfiguration.equals(that.easingConfiguration);
+        return length == that.length && complete == that.complete && incomplete == that.incomplete && ticksPerUnit == that.ticksPerUnit && format.equals(that.format) && parser.equals(that.parser) && styles.equals(that.styles) && easingConfiguration.equals(that.easingConfiguration);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(length, complete, incomplete, format, parser, styles, easingConfiguration, tickPerUnit);
+        return Objects.hash(length, complete, incomplete, format, parser, styles, easingConfiguration, ticksPerUnit);
     }
 
     @Override
@@ -232,7 +232,7 @@ public final class ProgressBarConfiguration {
                 ", parser=" + parser +
                 ", styles=" + styles +
                 ", easingConfiguration=" + easingConfiguration +
-                ", ticksPerUnit=" + tickPerUnit +
+                ", ticksPerUnit=" + ticksPerUnit +
                 ']';
     }
 
@@ -287,7 +287,7 @@ public final class ProgressBarConfiguration {
          * @throws IllegalArgumentException if {@code tickPerUnit} is less than {@code 1}
          */
         public ProgressBarConfigurationBuilder ticksPerUnit(int ticksPerUnit) {
-            if (ticksPerUnit <= 0) throw new IllegalArgumentException("Tick per unit cannot be less than 0");
+            if (ticksPerUnit <= 0) throw new IllegalArgumentException("Ticks per unit cannot be less than 1");
             this.tickPerUnit = ticksPerUnit;
             return this;
         }
@@ -364,9 +364,9 @@ public final class ProgressBarConfiguration {
          * @throws NullPointerException     if {@code format} is {@code null}
          */
         public ProgressBarConfigurationBuilder styleRange(int min, int max, String format) {
-            requireNonNull(format, FORMAT_ERR_MESSAGE);
             if (min < 0) throw new IllegalArgumentException("Min must be positive");
-            return this.styleWhen(p -> p >= min && p <= max, format);
+            if (max < min) throw new IllegalArgumentException("Max must be greater than or equal to min");
+            return styleWhen(p -> p >= min && p <= max, requireNonNull(format, FORMAT_ERR_MESSAGE));
         }
 
         /**

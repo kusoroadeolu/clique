@@ -159,7 +159,7 @@ public final class ParserConfiguration {
      * <p>This builder is <b>not</b> thread-safe.
      */
     public static class ParserConfigurationBuilder {
-        private String delimiter = String.valueOf(',');
+        private String delimiter = Character.toString(',');
         private boolean enableStrictParsing = false;
         private boolean enableAutoReset = false;
         private final StyleContext.StyleContextBuilder styleContextBuilder = StyleContext.builder();

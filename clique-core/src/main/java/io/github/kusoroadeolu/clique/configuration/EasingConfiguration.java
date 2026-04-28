@@ -1,5 +1,6 @@
 package io.github.kusoroadeolu.clique.configuration;
 
+import io.github.kusoroadeolu.clique.internal.documentation.InternalApi;
 import io.github.kusoroadeolu.clique.internal.documentation.Stable;
 
 import java.util.Objects;
@@ -155,6 +156,7 @@ public final class EasingConfiguration {
      * @param tickBy the number of ticks being advanced
      * @return {@code true} if easing should be applied; {@code false} otherwise
      */
+    @InternalApi(since = "4.0.2")
     public boolean shouldEase(int tickBy) {
         if (threshold < 0) return false;
         return tickBy >= threshold;

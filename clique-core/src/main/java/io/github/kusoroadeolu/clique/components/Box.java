@@ -50,6 +50,11 @@ public class Box implements Component {
         this.styleBorders();
     }
 
+    void validateTypeAndConfig(BoxType type, BoxConfiguration config) {
+        requireNonNull(type, "Box type cannot be null");
+        requireNonNull(config, "Box configuration cannot be null");
+    }
+
     public Box(BoxType type) {
         this(type, BoxConfiguration.DEFAULT);
     }
@@ -138,7 +143,7 @@ public class Box implements Component {
      * <p>When dimensions are set, content that exceeds the usable inner width
      * (width minus padding) or the specified height will throw an
      * {@link InvalidDimensionException} at render time. If this method is never
-     * called, the box autosizes to fit its content.</p>
+     * called, the box auto sizes to fit its content.</p>
      *
      * @param width  the total outer width of the box; must be greater than 0
      * @param height the total outer height of the box; must be greater than 0
@@ -151,7 +156,7 @@ public class Box implements Component {
                     "Width and height must be greater than 0. To skip dimensions and instead autosize, don't call this method."
             );
         }
-
+        nullCachedString();
         this.height = height;
         this.width = width;
         return this;
@@ -168,7 +173,7 @@ public class Box implements Component {
             int contentWidth = cells.longest();
             int contentHeight = cells.size();
 
-            if (contentWidth > usableWidth) throw new InvalidDimensionException("Content overflows: content is %s wide but usable inner width is only %s".formatted(contentWidth, this.width));
+            if (contentWidth > usableWidth) throw new InvalidDimensionException("Content overflows: content is %s wide but usable inner width is only %s".formatted(contentWidth, usableWidth));
             if (contentHeight > height) throw new InvalidDimensionException("Content overflows: %s lines of content cannot fit in a box of height %s".formatted(contentHeight, this.height));
         }
     }
@@ -194,33 +199,27 @@ public class Box implements Component {
     }
 
     @Override
-    public boolean equals(Object object) {
-        if (object == null || getClass() != object.getClass()) return false;
-        if (!super.equals(object)) return false;
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
 
-        Box that = (Box) object;
-        return Objects.equals(borderChars, that.borderChars);
-    }
-
-    static void validateTypeAndConfig(BoxType type, BoxConfiguration config) {
-        requireNonNull(type, "Box type cannot be null");
-        requireNonNull(config, "Box configuration cannot be null");
+        Box box = (Box) o;
+        return width == box.width && height == box.height && Objects.equals(content, box.content) && Objects.equals(configuration, box.configuration) && align == box.align && Objects.equals(borderChars, box.borderChars);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(width, height, content, configuration, align, borderChars);
+       return Objects.hash(width, height, content, configuration, align, borderChars);
     }
 
     @Override
     public String toString() {
         return "Box[" +
-                "boxConfiguration=" + configuration +
+                "width=" + width +
+                ", height=" + height +
+                ", content='" + content + '\'' +
+                ", configuration=" + configuration +
                 ", align=" + align +
                 ", borderChars=" + borderChars +
-                ", content='" + content + '\'' +
-                ", height=" + height +
-                ", width=" + width +
                 ']';
     }
 }

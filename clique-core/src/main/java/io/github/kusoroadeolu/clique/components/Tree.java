@@ -6,10 +6,7 @@ import io.github.kusoroadeolu.clique.internal.utils.StringUtils;
 import io.github.kusoroadeolu.clique.spi.AnsiCode;
 import io.github.kusoroadeolu.clique.style.StyleBuilder;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 import static io.github.kusoroadeolu.clique.internal.utils.Constants.EMPTY;
 import static io.github.kusoroadeolu.clique.internal.utils.Constants.NEWLINE;
@@ -89,6 +86,9 @@ public class Tree implements Component {
     public Tree add(Tree tree) {
         Objects.requireNonNull(tree, "Tree cannot be null");
         assertNotSelf(tree);
+        if (tree.parent != null) {
+            tree.parent.children.remove(tree);
+        }
         tree.parent = this;
         children.add(tree);
         return tree;
@@ -148,5 +148,29 @@ public class Tree implements Component {
 
     void assertNotSelf(Tree tree){
         if (tree == this) throw new UnsupportedOperationException("Cannot nest a tree within itself");
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Tree tree = (Tree) o;
+        return Objects.equals(label, tree.label) && Objects.equals(children, tree.children) && Objects.equals(treeConfiguration, tree.treeConfiguration) && Objects.equals(parent, tree.parent);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(label, children, treeConfiguration, parent);
+    }
+
+    @Override
+    public String toString() {
+        return "Tree[" +
+                "label='" + label + '\'' +
+                ", children=" + children +
+                ", treeConfiguration=" + treeConfiguration +
+                ", connectorColor=" + Arrays.toString(connectorColor) +
+                ", parent=" + parent +
+                ']';
     }
 }

@@ -39,6 +39,7 @@ import static io.github.kusoroadeolu.clique.style.StyleCode.RESET;
 public class ItemList implements Component {
     private final List<ListItem> items;
     private ItemListConfiguration configuration;
+    private String lastSymbol;
     private static final ItemList NONE = new ItemList();
 
     public ItemList(ItemListConfiguration configuration) {
@@ -64,8 +65,9 @@ public class ItemList implements Component {
      */
     public ItemList item(String symbol, String content, ItemList itemList){
         Objects.requireNonNull(itemList, "Sublist cannot be null");
+        lastSymbol = symbol;
         assertNotSelf(itemList);
-        this.items.add(new ListItem(symbol, content, itemList.setConfiguration(this.configuration)));
+        items.add(new ListItem(symbol, content, itemList.recursivelySetConfiguration(configuration)));
         return this;
     }
 
@@ -76,10 +78,24 @@ public class ItemList implements Component {
      * @param content the text content of the item
      * @return this list instance for method chaining
      */
-    public ItemList item(String symbol, String content){
-        this.items.add(new ListItem(symbol, content, NONE));
+    public ItemList item(String symbol, String content) {
+        lastSymbol = symbol;
+        items.add(new ListItem(symbol, content, NONE));
         return this;
     }
+
+    /**
+     * Adds a leaf item to the list with no sublist.
+     * Uses the last used symbol for this item
+     *
+     * @param content the text content of the item
+     * @return this list instance for method chaining
+     */
+    public ItemList item(String content) {
+        if (lastSymbol == null) throw new IllegalStateException("No symbol has been set yet");
+        return item(lastSymbol, content);
+    }
+
 
     /**
      * {@inheritDoc}
@@ -114,8 +130,14 @@ public class ItemList implements Component {
     }
 
 
-    ItemList setConfiguration(ItemListConfiguration configuration){
+    ItemList recursivelySetConfiguration(ItemListConfiguration configuration){
         this.configuration = configuration;
+
+        for (ListItem item : items) {
+            if (item.sublist() != NONE) {
+                item.sublist().recursivelySetConfiguration(configuration);
+            }
+        }
         return this;
     }
 

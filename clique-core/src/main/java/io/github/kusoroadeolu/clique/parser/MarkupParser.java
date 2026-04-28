@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static io.github.kusoroadeolu.clique.internal.markup.MarkupPostProcessor.postProcess;
+import static io.github.kusoroadeolu.clique.internal.utils.Constants.EMPTY;
 import static io.github.kusoroadeolu.clique.internal.utils.StringUtils.stripAnsi;
 
 
@@ -108,7 +109,7 @@ public record MarkupParser(ParserConfiguration parserConfiguration) {
      *         or the original value if {@code null} or blank
      */
     public String getOriginalString(String tokenedString) {
-        if (tokenedString == null || tokenedString.isBlank()) return tokenedString;
+        if (tokenedString == null || tokenedString.isBlank()) return EMPTY;
         ParseResult result = this.getParseResult(tokenedString);
 
         if (!result.isPresent()) {
