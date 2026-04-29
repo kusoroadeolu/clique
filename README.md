@@ -61,10 +61,8 @@ Ink bold = Clique.ink().bold();
 bold.red().on("error");    // bold + red
 bold.yellow().on("warn");  // bold + yellow. The original stays untouched
 
-// RGB & gradients
-RGBAnsiCode pink = Clique.rgb(255, 105, 180);
-RGBAnsiCode blue = Clique.rgb(100, 149, 237);
-Clique.ink().bold().gradient(pink, blue).on("Gradient text");
+// Gradients
+Clique.ink().bold().gradient("#FF69B4", "#6495ED").on("Gradient text");
 ```
 ![Sample Ink](images/ink.png)
 
